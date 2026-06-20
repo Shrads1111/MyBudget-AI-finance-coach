@@ -1,0 +1,26 @@
+# Environment
+.env
+*.env
+
+# Firebase Keys
+firebase_key.json
+serviceAccountKey.json
+backend/firebase/serviceAccountKey.json
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
