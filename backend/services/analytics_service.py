@@ -2,6 +2,7 @@ from services.expense_service import ExpenseService
 from services.budget_service import BudgetService
 from services.savings_service import SavingsService
 from services.group_service import GroupService
+from utils.constants import is_income
 from datetime import datetime
 import collections
 import logging
@@ -30,7 +31,7 @@ class AnalyticsService:
                 amt = float(exp.get("amount", 0.0))
                 category = exp.get("category", "")
 
-                if category == "Income":
+                if is_income(category):
                     total_income_amt += amt
                 else:
                     total_exp_amt += amt

@@ -1,5 +1,6 @@
 import math
 from services.expense_service import ExpenseService
+from utils.constants import is_income
 import logging
 from collections import defaultdict
 
@@ -24,7 +25,7 @@ class ExpenseAgent:
                     "patterns": "No spending patterns can be recognized due to lack of transaction history."
                 }
 
-            amounts = [float(e["amount"]) for e in expenses_data if e["category"] != "Income"]
+            amounts = [float(e["amount"]) for e in expenses_data if not is_income(e["category"])]
             
             if not amounts:
                 return {
@@ -47,7 +48,7 @@ class ExpenseAgent:
             threshold = avg_amount + (2 * std_amount) if std_amount > 0 else avg_amount * 3
             
             for exp in expenses_data:
-                if exp["category"] != "Income" and float(exp["amount"]) > threshold:
+                if not is_income(exp["category"]) and float(exp["amount"]) > threshold:
                     anomalies.append({
                         "expense_id": exp["expense_id"],
                         "category": exp["category"],
@@ -61,7 +62,7 @@ class ExpenseAgent:
             cat_totals = defaultdict(float)
             cat_counts = defaultdict(int)
             for exp in expenses_data:
-                if exp["category"] != "Income":
+                if not is_income(exp["category"]):
                     cat_totals[exp["category"]] += float(exp["amount"])
                     cat_counts[exp["category"]] += 1
 

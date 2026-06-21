@@ -1,5 +1,6 @@
 from services.expense_service import ExpenseService
 from services.recurring_service import RecurringService
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -64,7 +65,7 @@ class InsightsAgent:
                     "recommendations": recommendations
                 }
 
-            total_spend = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+            total_spend = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
             
             if total_spend <= 0:
                 recommendations = ["You have not spent anything yet. Keep up the high savings!"]
@@ -84,7 +85,7 @@ class InsightsAgent:
             # Group by category
             cat_spend = {}
             for e in expenses:
-                if e["category"] != "Income":
+                if not is_income(e["category"]):
                     cat = e["category"]
                     cat_spend[cat] = cat_spend.get(cat, 0.0) + float(e["amount"])
 

@@ -996,6 +996,72 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         self.assertTrue(result_clarify["clarification_needed"])
         self.assertEqual(result_clarify["clarification_message"], "Could not identify amount")
 
+    def test_income_calculation_multiple_categories(self):
+        """Test is_income helper classifies multiple income categories correctly and is integrated with AnalyticsService"""
+        from utils.constants import is_income
+        from services.analytics_service import AnalyticsService
+
+        # 1. Test helper directly
+        self.assertTrue(is_income("Income"))
+        self.assertTrue(is_income("Salary"))
+        self.assertTrue(is_income("Freelancing"))
+        self.assertTrue(is_income("Refund"))
+        self.assertTrue(is_income("Interest"))
+        self.assertTrue(is_income("Bonus"))
+        self.assertTrue(is_income("Other Income"))
+        self.assertTrue(is_income("salary"))
+        self.assertTrue(is_income("  bonus  "))
+        self.assertFalse(is_income("Food"))
+        self.assertFalse(is_income("Entertainment"))
+        self.assertFalse(is_income(None))
+
+        # 2. Test integration with AnalyticsService calculations
+        # Clear database and prepare test expenses
+        self.firestore_db["expenses"] = {
+            "tx-1": {
+                "expense_id": "tx-1",
+                "uid": "test-user-123",
+                "amount": 5000.0,
+                "category": "Salary", # income category
+                "date": "2026-06-21",
+                "description": "Stipend",
+            },
+            "tx-2": {
+                "expense_id": "tx-2",
+                "uid": "test-user-123",
+                "amount": 10000.0,
+                "category": "Income", # income category
+                "date": "2026-06-21",
+                "description": "Papa sent",
+            },
+            "tx-3": {
+                "expense_id": "tx-3",
+                "uid": "test-user-123",
+                "amount": 2000.0,
+                "category": "Food", # expense category
+                "date": "2026-06-21",
+                "description": "Dinner",
+            },
+            "tx-4": {
+                "expense_id": "tx-4",
+                "uid": "test-user-123",
+                "amount": 300.0,
+                "category": "Other", # expense category
+                "date": "2026-06-21",
+                "description": "Stationery",
+            }
+        }
+
+        # Calculate dashboard summary
+        res = AnalyticsService.get_dashboard_summary("test-user-123")
+        summary = res["summary"]
+
+        # Net balance = Income (Salary 5000 + Income 10000) - Expense (Food 2000 + Other 300)
+        # = 15000 - 2300 = 12700
+        self.assertEqual(summary["total_income"], 15000.0)
+        self.assertEqual(summary["total_expenses"], 2300.0)
+        self.assertEqual(summary["total_balance"], 12700.0)
+
 if __name__ == '__main__':
     unittest.main()
 

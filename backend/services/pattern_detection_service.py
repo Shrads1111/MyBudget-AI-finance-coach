@@ -1,6 +1,7 @@
 import datetime
 from collections import defaultdict
 from services.expense_service import ExpenseService
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ class PatternDetectionService:
         try:
             # 1. Fetch expenses
             expenses = ExpenseService.get_expenses(uid, limit=1000)["expenses"]
-            non_income = [e for e in expenses if e["category"] != "Income"]
+            non_income = [e for e in expenses if not is_income(e["category"])]
 
             patterns = []
 

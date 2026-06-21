@@ -2,6 +2,7 @@ from services.expense_service import ExpenseService
 from services.budget_service import BudgetService
 from services.savings_service import SavingsService
 from agents.expense_agent import ExpenseAgent
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,8 +19,8 @@ class HealthScoreAgent:
             goals = SavingsService.get_goals(uid)
 
             # 1. Savings Ratio Score (Max 30 points)
-            income_total = sum(float(e["amount"]) for e in expenses if e["category"] == "Income")
-            expense_total = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+            income_total = sum(float(e["amount"]) for e in expenses if is_income(e["category"]))
+            expense_total = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
             
             savings_score = 15.0 # default fallback
             savings_ratio = 0.0

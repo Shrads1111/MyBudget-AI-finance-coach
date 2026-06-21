@@ -2,6 +2,7 @@ import re
 import datetime
 from services.expense_service import ExpenseService
 from services.ai_service import AIService
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,8 +36,8 @@ class SimulatorService:
         try:
             # Gather base numbers to validate calculations
             expenses = ExpenseService.get_expenses(uid, limit=1000)["expenses"]
-            income_total = sum(float(e["amount"]) for e in expenses if e["category"] == "Income")
-            expense_total = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+            income_total = sum(float(e["amount"]) for e in expenses if is_income(e["category"]))
+            expense_total = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
 
             # Default fallbacks for student cash flows
             est_monthly_income = max(10000.0, income_total)

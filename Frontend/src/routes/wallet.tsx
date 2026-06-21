@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { isIncome } from "@/lib/utils";
 
 export const Route = createFileRoute("/wallet")({
   head: () => ({ meta: [{ title: "Wallet · MyBudget" }] }),
@@ -152,7 +153,7 @@ function WalletPage() {
 
       // Apply amount to the resolved best match account
       if (bestAccIndex !== -1) {
-        if (item.category === "Income") {
+        if (isIncome(item.category)) {
           calculated[bestAccIndex].balance += amt;
         } else {
           calculated[bestAccIndex].balance -= amt;

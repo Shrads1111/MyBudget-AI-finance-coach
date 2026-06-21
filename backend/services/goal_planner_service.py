@@ -3,6 +3,7 @@ from services.savings_service import SavingsService
 from services.expense_service import ExpenseService
 from services.ai_service import AIService
 from middleware.error_handler import APIError
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -45,8 +46,8 @@ class GoalPlannerService:
 
                 # 4. Calculate Cash Flow Savings Rate for completion probability
                 expenses = ExpenseService.get_expenses(uid, limit=1000)["expenses"]
-                income_total = sum(float(e["amount"]) for e in expenses if e["category"] == "Income")
-                expense_total = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+                income_total = sum(float(e["amount"]) for e in expenses if is_income(e["category"]))
+                expense_total = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
 
                 # Estimate user monthly net savings
                 # Assume a minimum basic saving capacity of ₹2,500/mo if no transactions exist

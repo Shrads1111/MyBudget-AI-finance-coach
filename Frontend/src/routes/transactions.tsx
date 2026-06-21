@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { isIncome } from "@/lib/utils";
 import { ArrowDownRight, ArrowUpRight, Filter, Mic, Plus, Search, Trash2, X, AlertCircle, FileText, Upload, AlertTriangle, Loader2, Calendar as CalendarIcon } from "lucide-react";
 import { getAuth } from "firebase/auth";
 import { VoiceMicButton } from "@/components/VoiceTransaction";
@@ -83,8 +84,8 @@ function TransactionsPage() {
         
       const matchesCategory =
         selectedCategory === "all" ||
-        (selectedCategory === "income" && t.category === "Income") ||
-        (selectedCategory === "expense" && t.category !== "Income") ||
+        (selectedCategory === "income" && isIncome(t.category)) ||
+        (selectedCategory === "expense" && !isIncome(t.category)) ||
         t.category.toLowerCase() === selectedCategory.toLowerCase();
 
       const matchesMonth = selectedMonth === "" || t.date.startsWith(selectedMonth);
@@ -100,7 +101,7 @@ function TransactionsPage() {
     let expense = 0;
     filtered.forEach((t) => {
       const amt = parseFloat(t.amount as any) || 0;
-      if (t.category === "Income") {
+      if (isIncome(t.category)) {
         income += amt;
       } else {
         expense += amt;
@@ -221,8 +222,8 @@ function TransactionsPage() {
             <div className="divide-y divide-border">
               {filtered.map((t) => (
                 <div key={t.expense_id} className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover">
-                  <div className={`h-10 w-10 rounded-xl grid place-items-center ${t.category === "Income" ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"}`}>
-                    {t.category === "Income" ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                  <div className={`h-10 w-10 rounded-xl grid place-items-center ${isIncome(t.category) ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"}`}>
+                    {isIncome(t.category) ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{t.description || t.category}</div>
@@ -230,8 +231,8 @@ function TransactionsPage() {
                       {t.category} · {t.date}
                     </div>
                   </div>
-                  <div className={`text-sm font-semibold ${t.category === "Income" ? "text-emerald-500" : "text-foreground"}`}>
-                    {t.category === "Income" ? "+" : "-"}₹{parseFloat(t.amount as any).toLocaleString()}
+                  <div className={`text-sm font-semibold ${isIncome(t.category) ? "text-emerald-500" : "text-foreground"}`}>
+                    {isIncome(t.category) ? "+" : "-"}₹{parseFloat(t.amount as any).toLocaleString()}
                   </div>
                   <button onClick={() => handleRemove(t.expense_id)} className="p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface" aria-label="Delete">
                     <Trash2 className="h-4 w-4" />

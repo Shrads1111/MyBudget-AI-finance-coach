@@ -1,6 +1,7 @@
 from services.expense_service import ExpenseService
 from services.budget_service import BudgetService
 from datetime import datetime, date
+from utils.constants import is_income
 import calendar
 import logging
 
@@ -22,7 +23,7 @@ class ForecastingAgent:
             current_day = today.day
 
             # 1. End of month expense forecasting
-            month_expenses = [e for e in expenses if e["date"].startswith(current_month_str) and e["category"] != "Income"]
+            month_expenses = [e for e in expenses if e["date"].startswith(current_month_str) and not is_income(e["category"])]
             current_month_total = sum(float(e["amount"]) for e in month_expenses)
             
             # Forecast end-of-month spend
@@ -55,8 +56,8 @@ class ForecastingAgent:
                             })
 
             # 3. Future savings forecasting (based on income vs expenses)
-            all_income = sum(float(e["amount"]) for e in expenses if e["category"] == "Income")
-            all_expense = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+            all_income = sum(float(e["amount"]) for e in expenses if is_income(e["category"]))
+            all_expense = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
             
             # Compute net savings rate (historical or monthly)
             # We can compute average monthly net savings

@@ -13418,3 +13418,612 @@ AttributeError: 'list' object has no attribute 'get'
 2026-06-21 15:38:11,819 INFO [services.savings_service] [savings_service.py:114] - Savings goal f4fe3a63-1572-4757-9ecb-fe3505573469 created for user test-user-123
 2026-06-21 15:38:11,819 INFO [services.savings_service] [savings_service.py:114] - Savings goal f4fe3a63-1572-4757-9ecb-fe3505573469 created for user test-user-123
 2026-06-21 15:38:11,819 INFO [services.savings_service] [savings_service.py:114] - Savings goal f4fe3a63-1572-4757-9ecb-fe3505573469 created for user test-user-123
+2026-06-21 16:00:36,723 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:36] "OPTIONS /api/users/sync HTTP/1.1" 200 -
+2026-06-21 16:00:39,301 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:39] "POST /api/users/sync HTTP/1.1" 200 -
+2026-06-21 16:00:39,399 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:39] "OPTIONS /api/expenses?limit=1000&sort_by=date&sort_order=desc HTTP/1.1" 200 -
+2026-06-21 16:00:39,706 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:39] "OPTIONS /api/expenses?limit=1000&sort_by=date&sort_order=desc HTTP/1.1" 200 -
+2026-06-21 16:00:39,892 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:39] "GET /api/expenses?limit=1000&sort_by=date&sort_order=desc HTTP/1.1" 200 -
+2026-06-21 16:00:40,358 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 16:00:40] "GET /api/expenses?limit=1000&sort_by=date&sort_order=desc HTTP/1.1" 200 -
+2026-06-21 16:05:59,213 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\utils\\constants.py', reloading
+2026-06-21 16:06:01,859 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:03,472 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:04,673 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:04,742 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:04,751 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:09,950 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\services\\analytics_service.py', reloading
+2026-06-21 16:06:10,206 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:11,321 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:11,893 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:11,925 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:11,927 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:15,047 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\services\\simulator_service.py', reloading
+2026-06-21 16:06:15,338 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:16,404 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:16,955 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:16,994 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:16,996 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:18,090 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\services\\pattern_detection_service.py', reloading
+2026-06-21 16:06:18,376 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:19,486 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:19,987 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:20,035 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:20,038 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:23,174 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\services\\health_score_service.py', reloading
+2026-06-21 16:06:23,498 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:24,530 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:25,053 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:25,087 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:25,090 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:30,281 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\services\\goal_planner_service.py', reloading
+2026-06-21 16:06:30,540 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:31,581 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:32,095 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:32,128 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:32,130 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:35,275 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\agents\\insights_agent.py', reloading
+2026-06-21 16:06:35,591 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:36,685 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:37,188 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:37,220 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:37,222 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:41,371 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\agents\\health_score_agent.py', reloading
+2026-06-21 16:06:41,650 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:42,772 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:43,352 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:43,385 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:43,388 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:47,552 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\agents\\forecasting_agent.py', reloading
+2026-06-21 16:06:47,876 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:48,986 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:49,549 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:49,582 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:49,585 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:53,746 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\agents\\finance_coach_agent.py', reloading
+2026-06-21 16:06:54,019 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:06:55,175 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:06:55,699 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:06:55,733 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:06:55,736 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:06:59,900 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\agents\\expense_agent.py', reloading
+2026-06-21 16:07:00,181 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:07:01,284 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:07:01,828 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:07:01,862 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:07:01,866 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:07:30,736 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\test_backend.py', reloading
+2026-06-21 16:07:31,120 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 16:07:32,424 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:07:32,999 INFO [app] [app.py:102] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 16:07:33,031 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 16:07:33,034 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 145-502-271
+2026-06-21 16:07:49,871 INFO [services.firebase_service] [firebase_service.py:24] - Firebase Admin successfully initialized.
+2026-06-21 16:07:50,514 INFO [services.account_service] [account_service.py:52] - Account ce40c4b3-3f8a-41bc-ad62-c09c5177838e created for user test-user-123
+2026-06-21 16:07:50,516 INFO [services.account_service] [account_service.py:71] - Account ce40c4b3-3f8a-41bc-ad62-c09c5177838e deleted for user test-user-123
+2026-06-21 16:07:50,557 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,557 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,557 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Model error
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Model error
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Model error
+2026-06-21 16:07:50,558 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,558 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,558 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-flash-lite-latest: Model error
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-flash-lite-latest: Model error
+2026-06-21 16:07:50,558 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-flash-lite-latest: Model error
+2026-06-21 16:07:50,558 ERROR [services.ai_service] [ai_service.py:43] - All Gemini models failed to generate content.
+2026-06-21 16:07:50,558 ERROR [services.ai_service] [ai_service.py:43] - All Gemini models failed to generate content.
+2026-06-21 16:07:50,558 ERROR [services.ai_service] [ai_service.py:43] - All Gemini models failed to generate content.
+2026-06-21 16:07:50,592 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,592 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,592 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,592 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,592 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Quota Exceeded 429
+2026-06-21 16:07:50,592 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Quota Exceeded 429
+2026-06-21 16:07:50,592 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Quota Exceeded 429
+2026-06-21 16:07:50,592 WARNING [services.ai_service] [ai_service.py:40] - Gemini generation failed for model gemini-2.5-flash: Quota Exceeded 429
+2026-06-21 16:07:50,593 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,593 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,593 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,593 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-flash-lite-latest
+2026-06-21 16:07:50,611 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,611 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,611 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,611 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,611 INFO [services.ai_service] [ai_service.py:35] - Attempting Gemini generation with model: gemini-2.5-flash
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,643 INFO [services.budget_service] [budget_service.py:132] - Budget 2a6d33c8-b176-4b36-a458-70324763d838 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,650 INFO [services.expense_service] [expense_service.py:40] - Expense 48ce87ab-f60e-4fb3-8e56-d23847134f35 created for user test-user-123
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,653 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Budget Alert (80%) - Food
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,677 INFO [services.expense_service] [expense_service.py:40] - Expense df582702-aafd-4e42-b710-42b323825b69 created for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,682 INFO [services.expense_service] [expense_service.py:133] - Expense df582702-aafd-4e42-b710-42b323825b69 updated for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,683 INFO [services.expense_service] [expense_service.py:148] - Expense df582702-aafd-4e42-b710-42b323825b69 deleted for user test-user-123
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,684 WARNING [middleware.error_handler] [error_handler.py:25] - APIError: Expense not found (status: 404)
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,704 INFO [services.savings_service] [savings_service.py:114] - Savings goal bd7d75b4-a9e0-4280-bfd6-94d2ec9feee2 created for user test-user-123
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,706 ERROR [services.goal_planner_service] [goal_planner_service.py:116] - Failed to generate AI advice for goal planner: Quota error
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,726 INFO [services.savings_service] [savings_service.py:114] - Savings goal b59ec249-07bf-4414-b086-6a6e7bf00320 created for user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,748 INFO [services.group_service] [group_service.py:59] - Group c16af051-9029-4304-be80-1916302e7ea1 created by user test-user-123
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,750 INFO [services.group_service] [group_service.py:105] - User roommate-riya added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,751 INFO [services.group_service] [group_service.py:246] - Group expense 857f0ff9-f39a-46d5-abec-afe0a06babdf added to group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,752 INFO [services.expense_service] [expense_service.py:40] - Expense 857f0ff9-f39a-46d5-abec-afe0a06babdf created for user test-user-123
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,753 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-riya: New Split Request in Flat 202 - Rent & WiFi
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,767 INFO [services.group_service] [group_service.py:417] - User roommate-riya paid their share of expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,768 INFO [services.notification_service] [notification_service.py:36] - Notification created for test-user-123: Split Payment Received
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.group_service] [group_service.py:491] - User test-user-123 marked member roommate-aman as paid for expense 857f0ff9-f39a-46d5-abec-afe0a06babdf in group c16af051-9029-4304-be80-1916302e7ea1
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,770 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: Split Marked as Paid
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,793 INFO [services.group_service] [group_service.py:59] - Group 22c96302-c541-48ba-a3ee-2828c600db9a created by user test-user-123
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,795 INFO [services.group_service] [group_service.py:246] - Group expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 added to group 22c96302-c541-48ba-a3ee-2828c600db9a
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,796 INFO [services.expense_service] [expense_service.py:40] - Expense b1dcb7b2-464b-417d-b90b-4aee60b7e376 created for user test-user-123
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,797 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Concurrency Test Group
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,819 INFO [services.group_service] [group_service.py:59] - Group b9fae21e-ba31-4ff1-bd13-1662d0a200ab created by user test-user-123
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.group_service] [group_service.py:246] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c added to group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,821 INFO [services.expense_service] [expense_service.py:40] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c created for user test-user-123
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,822 INFO [services.notification_service] [notification_service.py:36] - Notification created for roommate-aman: New Split Request in Edit Test Group
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,824 INFO [services.group_service] [group_service.py:740] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c edited in group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,825 INFO [services.expense_service] [expense_service.py:133] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c updated for user test-user-123
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,827 INFO [services.group_service] [group_service.py:830] - Group expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted from group b9fae21e-ba31-4ff1-bd13-1662d0a200ab
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,829 INFO [services.expense_service] [expense_service.py:148] - Expense 7e711f6e-ec2b-4d5c-8b89-603aa9ce796c deleted for user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,853 INFO [services.group_service] [group_service.py:59] - Group bcc977cd-ade4-4e11-90ba-8a11b70c7423 created by user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,919 INFO [services.expense_service] [expense_service.py:40] - Expense abd69537-ee55-42c6-bb77-934c54bcf3a3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,921 INFO [services.expense_service] [expense_service.py:40] - Expense 9283e319-c33a-418f-8805-52cf66f107e3 created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,922 INFO [services.savings_service] [savings_service.py:114] - Savings goal fb395dc1-4182-48e3-9207-b8ef5fd6658b created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,973 INFO [services.recurring_service] [recurring_service.py:82] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada created for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,996 INFO [services.recurring_service] [recurring_service.py:154] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada updated for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,998 INFO [services.expense_service] [expense_service.py:40] - Expense 2424aeb5-9c9e-41ec-884f-6af7c2ad83d7 created for user test-user-123
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:50,999 INFO [services.recurring_service] [recurring_service.py:233] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada marked as paid. Next due is 2026-08-01.
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,001 INFO [services.recurring_service] [recurring_service.py:169] - Recurring payment d9244c00-3b5d-44ed-b435-775e0a900ada deleted for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,022 INFO [services.savings_service] [savings_service.py:114] - Savings goal 13444f35-249f-4477-9625-73fb8107aac0 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123
+2026-06-21 16:07:51,087 INFO [services.savings_service] [savings_service.py:114] - Savings goal 8b46caea-af25-455b-ac8b-bcca3fab4ce5 created for user test-user-123

@@ -20,6 +20,7 @@ import {
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { VoiceMicButton } from "@/components/VoiceTransaction";
+import { isIncome } from "@/lib/utils";
 
 type DashboardSummary = {
   summary: {
@@ -630,14 +631,14 @@ export function Dashboard() {
                   <td className="px-6 py-4 font-medium">{a.category}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className={`h-8 w-8 rounded-lg grid place-items-center ${a.category === 'Income' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
-                        {a.category === 'Income' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                      <div className={`h-8 w-8 rounded-lg grid place-items-center ${isIncome(a.category) ? 'bg-emerald-500/10 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
+                        {isIncome(a.category) ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
                       </div>
                       {a.description || a.category}
                     </div>
                   </td>
                   <td className="px-6 py-4 font-medium">
-                    {a.category === 'Income' ? '+' : '-'}₹{floatAmount(a.amount).toLocaleString()}
+                    {isIncome(a.category) ? '+' : '-'}₹{floatAmount(a.amount).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 text-muted-foreground">{a.date}</td>
                 </tr>

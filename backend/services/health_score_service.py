@@ -3,6 +3,7 @@ import math
 from services.expense_service import ExpenseService
 from services.budget_service import BudgetService
 from services.savings_service import SavingsService
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -31,8 +32,8 @@ class HealthScoreService:
 
             # ---- 1. SAVINGS RATE (Max 30 Points) ----
             # Compute total income vs expense
-            income_total = sum(float(e["amount"]) for e in expenses if e["category"] == "Income")
-            expense_total = sum(float(e["amount"]) for e in expenses if e["category"] != "Income")
+            income_total = sum(float(e["amount"]) for e in expenses if is_income(e["category"]))
+            expense_total = sum(float(e["amount"]) for e in expenses if not is_income(e["category"]))
 
             if income_total > 0:
                 net_savings = income_total - expense_total
@@ -90,7 +91,7 @@ class HealthScoreService:
 
             # ---- 4. EXPENSE STABILITY / ANOMALIES (Max 15 Points) ----
             # Detect spikes: transaction exceeding 3x average of non-income expenses
-            non_income_expenses = [float(e["amount"]) for e in expenses if e["category"] != "Income"]
+            non_income_expenses = [float(e["amount"]) for e in expenses if not is_income(e["category"])]
             if non_income_expenses:
                 avg_expense = sum(non_income_expenses) / len(non_income_expenses)
                 anomalies_count = sum(1 for amt in non_income_expenses if amt > avg_expense * 3)

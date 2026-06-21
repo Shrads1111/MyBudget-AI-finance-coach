@@ -1,6 +1,7 @@
 from services.expense_service import ExpenseService
 from services.group_service import GroupService
 from services.firebase_service import FirebaseService
+from utils.constants import is_income
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class FinanceCoachAgent:
             group_count = len(list(groups_docs))
 
             # Student pocket money estimation (if they have an "Income" category transaction)
-            income_txns = [float(e["amount"]) for e in expenses if e["category"] == "Income"]
+            income_txns = [float(e["amount"]) for e in expenses if is_income(e["category"])]
             estimated_pocket_money = sum(income_txns) if income_txns else 10000.0 # Default fallback student budget
 
             food_spend = sum(float(e["amount"]) for e in expenses if e["category"] == "Food")
