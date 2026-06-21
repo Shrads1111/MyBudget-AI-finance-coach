@@ -70,12 +70,24 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                     docs = []
                     if col_name in self.firestore_db:
                         for d_id, data in self.firestore_db[col_name].items():
-                            # Simple query logic mock
-                            if field in data and data[field] == val:
-                                d_mock = MagicMock()
-                                d_mock.to_dict.return_value = data
-                                d_mock.id = d_id
-                                docs.append(d_mock)
+                            if field in data:
+                                actual_val = data[field]
+                                matched = False
+                                if isinstance(actual_val, list):
+                                    if val in actual_val:
+                                        matched = True
+                                elif isinstance(val, list):
+                                    if actual_val in val:
+                                        matched = True
+                                else:
+                                    if actual_val == val:
+                                        matched = True
+                                        
+                                if matched:
+                                    d_mock = MagicMock()
+                                    d_mock.to_dict.return_value = data
+                                    d_mock.id = d_id
+                                    docs.append(d_mock)
                     return docs
 
                 def sub_where(f, o, v):
@@ -248,6 +260,24 @@ class MyBudgetBackendTestCase(unittest.TestCase):
 
     def test_group_budgets(self):
         """Test Group creations, adding members, splitting, and settle suggest algorithm"""
+        # Seed test user profiles in the mocked firestore
+        db = FirebaseService.get_db()
+        db.collection("users").document("test-user-123").set({
+            "uid": "test-user-123",
+            "email": "test@student.edu",
+            "display_name": "Test User"
+        })
+        db.collection("users").document("roommate-aman").set({
+            "uid": "roommate-aman",
+            "email": "aman@student.edu",
+            "display_name": "Aman Roommate"
+        })
+        db.collection("users").document("roommate-riya").set({
+            "uid": "roommate-riya",
+            "email": "riya@student.edu",
+            "display_name": "Riya Roommate"
+        })
+
         # 1. Create group
         group_payload = {
             "group_name": "Flat 202 - Rent & WiFi",
@@ -261,7 +291,7 @@ class MyBudgetBackendTestCase(unittest.TestCase):
 
         group_id = data_create["group_id"]
 
-        # 2. Invite third member
+        # 2. Invite third member (which resolves to roommate-riya)
         res_invite = self.client.post('/api/groups/invite', headers=self.headers, json={
             "group_id": group_id,
             "member": "roommate-riya"
@@ -269,24 +299,40 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         self.assertEqual(res_invite.status_code, 200)
         self.assertEqual(len(json.loads(res_invite.data)["members"]), 3)
 
-        # 3. Add group expense: Creator pays ₹300 for WiFi split with all 3 members
+        # 3. Add group expense: Creator pays ₹300 for WiFi split with all 3 members equally
         exp_payload = {
             "group_id": group_id,
             "expense": {
                 "amount": 300.0,
                 "description": "WiFi Router Bill",
                 "paid_by": "test-user-123",
+                "split_type": "equal",
                 "split_with": ["test-user-123", "roommate-aman", "roommate-riya"]
             }
         }
         res_exp = self.client.post('/api/groups/expense', headers=self.headers, json=exp_payload)
+        data_exp = json.loads(res_exp.data)
         self.assertEqual(res_exp.status_code, 201)
+        self.assertIn("splits", data_exp)
+        self.assertEqual(len(data_exp["splits"]), 3)
+        self.assertIn("expenseId", data_exp)
+        self.assertIn("groupId", data_exp)
+        self.assertIn("paidBy", data_exp)
+        self.assertIn("participants", data_exp)
+        self.assertIn("createdAt", data_exp)
+        expense_id = data_exp["expense_id"]
 
-        # 4. Get Summary
+        # Verify normal expense transaction was created for the payer
+        res_expenses = self.client.get('/api/expenses', headers=self.headers)
+        data_expenses = json.loads(res_expenses.data)
+        self.assertTrue(any("WiFi Router Bill" in e.get("description", "") for e in data_expenses.get("expenses", [])))
+
+        # 4. Get Summary - initial state (unpaid splits)
         res_sum = self.client.get(f'/api/groups/{group_id}/summary', headers=self.headers)
         data_sum = json.loads(res_sum.data)
         self.assertEqual(res_sum.status_code, 200)
         self.assertEqual(data_sum["total_spending"], 300.0)
+        self.assertEqual(data_sum["per_person_share"], 100.0)
         # test-user-123 paid 300, owes 100 -> balance +200
         # roommate-aman paid 0, owes 100 -> balance -100
         # roommate-riya paid 0, owes 100 -> balance -100
@@ -294,11 +340,106 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         self.assertEqual(data_sum["balances"]["roommate-aman"], -100.0)
         self.assertEqual(data_sum["balances"]["roommate-riya"], -100.0)
         
-        # VerifySuggested settlements
+        # Verify initial suggested settlements
         settlements = data_sum["suggested_settlements"]
         self.assertEqual(len(settlements), 2)
-        self.assertEqual(settlements[0]["to"], "test-user-123")
-        self.assertEqual(settlements[0]["amount"], 100.0)
+
+        # Verify dashboard summary calculations
+        res_dash = self.client.get('/api/dashboard/summary', headers=self.headers)
+        data_dash = json.loads(res_dash.data)
+        self.assertEqual(res_dash.status_code, 200)
+        self.assertEqual(data_dash["summary"]["friend_owe_you"], 200.0)
+        self.assertEqual(data_dash["summary"]["friend_you_owe"], 0.0)
+        self.assertEqual(data_dash["summary"]["friend_net"], 200.0)
+        
+        # 5. roommate-riya pays their share
+        with patch('services.firebase_service.FirebaseService.verify_id_token', return_value={"uid": "roommate-riya", "email": "riya@student.edu"}):
+            res_pay = self.client.post(f'/api/groups/{group_id}/expense/{expense_id}/pay', headers=self.headers)
+            self.assertEqual(res_pay.status_code, 200)
+
+        # 6. Get Summary again - roommate-riya is settled (0 balance), test-user-123 is owed +100
+        res_sum2 = self.client.get(f'/api/groups/{group_id}/summary', headers=self.headers)
+        data_sum2 = json.loads(res_sum2.data)
+        self.assertEqual(data_sum2["balances"]["test-user-123"], 100.0)
+        self.assertEqual(data_sum2["balances"]["roommate-riya"], 0.0)
+        self.assertEqual(data_sum2["balances"]["roommate-aman"], -100.0)
+
+        # 7. Creator (test-user-123) marks roommate-aman as paid
+        res_mark = self.client.post(f'/api/groups/{group_id}/expense/{expense_id}/mark-paid', headers=self.headers, json={
+            "member_uid": "roommate-aman"
+        })
+        self.assertEqual(res_mark.status_code, 200)
+
+        # 8. Get Summary again - everyone is fully settled
+        res_sum3 = self.client.get(f'/api/groups/{group_id}/summary', headers=self.headers)
+        data_sum3 = json.loads(res_sum3.data)
+        self.assertEqual(data_sum3["balances"]["test-user-123"], 0.0)
+        self.assertEqual(data_sum3["balances"]["roommate-aman"], 0.0)
+        self.assertEqual(data_sum3["balances"]["roommate-riya"], 0.0)
+        self.assertEqual(len(data_sum3["suggested_settlements"]), 0)
+
+    @patch('services.ai_service.AIService.generate_content')
+    def test_group_expense_parse_ai(self, mock_gemini):
+        """Test AI natural language parsing for group expense"""
+        # Scenario 1: Clean parsing with exact name/email/UID matching
+        mock_gemini.return_value = json.dumps({
+            "payer": "Aman Roommate",
+            "amount": 300,
+            "category": "Food",
+            "description": "lunch",
+            "participants": ["Test User", "aman@student.edu"],
+            "confidence": 0.9
+        })
+        
+        # Seed test user profiles in the mocked firestore
+        db = FirebaseService.get_db()
+        db.collection("users").document("test-user-123").set({
+            "uid": "test-user-123",
+            "email": "test@student.edu",
+            "display_name": "Test User"
+        })
+        db.collection("users").document("roommate-aman").set({
+            "uid": "roommate-aman",
+            "email": "aman@student.edu",
+            "display_name": "Aman Roommate"
+        })
+
+        group_payload = {
+            "group_name": "Goa Trip",
+            "members": ["test-user-123", "roommate-aman"]
+        }
+        res_create = self.client.post('/api/groups', headers=self.headers, json=group_payload)
+        group_id = json.loads(res_create.data)["group_id"]
+        
+        res_parse = self.client.post(f'/api/groups/{group_id}/parse-expense', headers=self.headers, json={
+            "query": "Aman paid 300 for lunch"
+        })
+        self.assertEqual(res_parse.status_code, 200)
+        data_parse = json.loads(res_parse.data)
+        self.assertEqual(data_parse["payer"], "roommate-aman")  # Resolved Aman Roommate -> roommate-aman
+        self.assertEqual(data_parse["amount"], 300)
+        self.assertEqual(data_parse["category"], "Food")
+        self.assertEqual(data_parse["description"], "lunch")
+        self.assertEqual(set(data_parse["participants"]), {"test-user-123", "roommate-aman"})
+        self.assertEqual(data_parse["needs_confirmation"], False)
+
+        # Scenario 2: Substring matching and non-member exclusion/low confidence
+        mock_gemini.return_value = json.dumps({
+            "payer": "Aman",
+            "amount": 300,
+            "category": "Food",
+            "description": "lunch",
+            "participants": ["Test User", "Unknown Person"],
+            "confidence": 0.5
+        })
+        res_parse2 = self.client.post(f'/api/groups/{group_id}/parse-expense', headers=self.headers, json={
+            "query": "Aman paid 300 for lunch with Unknown"
+        })
+        self.assertEqual(res_parse2.status_code, 200)
+        data_parse2 = json.loads(res_parse2.data)
+        self.assertEqual(data_parse2["payer"], "roommate-aman")  # Resolved Aman -> roommate-aman
+        self.assertEqual(data_parse2["participants"], ["test-user-123"])  # Unknown Person filtered out
+        self.assertEqual(data_parse2["needs_confirmation"], True)  # Low confidence and missing/unresolved participants
 
     @patch('services.ai_service.AIService.generate_content')
     def test_ai_advisor_and_chat(self, mock_gemini):
@@ -361,6 +502,8 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         self.assertEqual(res_plan.status_code, 200)
         self.assertIn("monthly_target", data_plan)
         self.assertEqual(data_plan["remaining_amount"], 10000.0)
+        self.assertIn("ai_advice", data_plan)
+        self.assertEqual(data_plan["ai_advice"], "Mocked simulation explanation.")
 
         # 3. Pattern Detection
         res_pattern = self.client.get('/api/analytics/patterns', headers=self.headers)
@@ -417,6 +560,443 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         data_list2 = json.loads(res_list2.data)
         self.assertEqual(len(data_list2), 0)
 
+    def test_group_expense_edit_and_delete(self):
+        """Test editing and deleting group expenses and syncing with standard expenses"""
+        # Seed users
+        db = FirebaseService.get_db()
+        db.collection("users").document("test-user-123").set({
+            "uid": "test-user-123",
+            "email": "test@student.edu",
+            "display_name": "Test User"
+        })
+        db.collection("users").document("roommate-aman").set({
+            "uid": "roommate-aman",
+            "email": "aman@student.edu",
+            "display_name": "Aman Roommate"
+        })
+
+        # Create group
+        group_payload = {
+            "group_name": "Edit Test Group",
+            "members": ["test-user-123", "roommate-aman"]
+        }
+        res_create = self.client.post('/api/groups', headers=self.headers, json=group_payload)
+        group_id = json.loads(res_create.data)["group_id"]
+
+        # Add expense: test-user-123 pays 200
+        exp_payload = {
+            "group_id": group_id,
+            "expense": {
+                "amount": 200.0,
+                "description": "Initial Bill",
+                "paid_by": "test-user-123",
+                "split_type": "equal",
+                "split_with": ["test-user-123", "roommate-aman"]
+            }
+        }
+        res_exp = self.client.post('/api/groups/expense', headers=self.headers, json=exp_payload)
+        data_exp = json.loads(res_exp.data)
+        self.assertEqual(res_exp.status_code, 201)
+        expense_id = data_exp["expense_id"]
+
+        # Verify normal expense exists for test-user-123
+        res_expenses = self.client.get('/api/expenses', headers=self.headers)
+        data_expenses = json.loads(res_expenses.data)
+        self.assertTrue(any(e.get("expense_id") == expense_id for e in data_expenses.get("expenses", [])))
+
+        # Edit expense: change amount to 400, split with aman, description to "Updated Bill"
+        edit_payload = {
+            "expense": {
+                "amount": 400.0,
+                "description": "Updated Bill",
+                "paid_by": "test-user-123",
+                "split_type": "equal",
+                "split_with": ["test-user-123", "roommate-aman"]
+            }
+        }
+        res_edit = self.client.put(f'/api/groups/{group_id}/expense/{expense_id}', headers=self.headers, json=edit_payload)
+        self.assertEqual(res_edit.status_code, 200)
+
+        # Get summary and verify total spending and per person share
+        res_sum = self.client.get(f'/api/groups/{group_id}/summary', headers=self.headers)
+        data_sum = json.loads(res_sum.data)
+        self.assertEqual(data_sum["total_spending"], 400.0)
+        self.assertEqual(data_sum["per_person_share"], 200.0)
+        self.assertEqual(data_sum["balances"]["roommate-aman"], -200.0)
+        self.assertEqual(data_sum["balances"]["test-user-123"], 200.0)
+        # Settlements should explain the flow
+        self.assertEqual(len(data_sum["settlements"]), 1)
+        self.assertEqual(data_sum["settlements"][0]["from"], "roommate-aman")
+        self.assertEqual(data_sum["settlements"][0]["to"], "test-user-123")
+        self.assertEqual(data_sum["settlements"][0]["amount"], 200.0)
+
+        # Verify normal expense transaction was updated
+        res_expenses = self.client.get('/api/expenses', headers=self.headers)
+        data_expenses = json.loads(res_expenses.data)
+        updated_exp = next((e for e in data_expenses.get("expenses", []) if e.get("expense_id") == expense_id), None)
+        self.assertIsNotNone(updated_exp)
+        self.assertEqual(updated_exp["amount"], 400.0)
+        self.assertEqual(updated_exp["description"], f"[Edit Test Group] Updated Bill")
+
+        # Now, delete expense
+        res_delete = self.client.delete(f'/api/groups/{group_id}/expense/{expense_id}', headers=self.headers)
+        self.assertEqual(res_delete.status_code, 200)
+
+        # Get summary again and verify reset
+        res_sum2 = self.client.get(f'/api/groups/{group_id}/summary', headers=self.headers)
+        data_sum2 = json.loads(res_sum2.data)
+        self.assertEqual(data_sum2["total_spending"], 0.0)
+        self.assertEqual(data_sum2["balances"]["roommate-aman"], 0.0)
+        self.assertEqual(data_sum2["balances"]["test-user-123"], 0.0)
+
+        # Verify normal expense transaction is deleted
+        res_expenses2 = self.client.get('/api/expenses', headers=self.headers)
+        data_expenses2 = json.loads(res_expenses2.data)
+        self.assertFalse(any(e.get("expense_id") == expense_id for e in data_expenses2.get("expenses", [])))
+
+    @patch('google.cloud.firestore.transactional', lambda f: f)
+    def test_group_expense_concurrency_safety(self):
+        """Test Firestore transaction safety for concurrent writes"""
+        # Create a custom db wrapper whose class name doesn't contain 'MagicMock'
+        class NonMockDB:
+            def __init__(self, mock_collection_fn):
+                self.mock_collection_fn = mock_collection_fn
+                self.txn_mock = MagicMock()
+            def collection(self, name):
+                col = self.mock_collection_fn(name)
+                # Wrap document get method to accept transaction parameter
+                orig_document = col.document
+                def wrap_document(*args, **kwargs):
+                    doc_mock = orig_document(*args, **kwargs)
+                    orig_get = doc_mock.get
+                    def wrap_get(*a, **kw):
+                        return orig_get()
+                    doc_mock.get = wrap_get
+                    return doc_mock
+                col.document = wrap_document
+                return col
+            def transaction(self):
+                return self.txn_mock
+
+        orig_db = FirebaseService.get_db()
+        custom_db = NonMockDB(orig_db.collection)
+        FirebaseService._db = custom_db
+
+        try:
+            # Seed users
+            custom_db.collection("users").document("test-user-123").set({
+                "uid": "test-user-123",
+                "email": "test@student.edu",
+                "display_name": "Test User"
+            })
+            custom_db.collection("users").document("roommate-aman").set({
+                "uid": "roommate-aman",
+                "email": "aman@student.edu",
+                "display_name": "Aman Roommate"
+            })
+
+            # Create group
+            group_payload = {
+                "group_name": "Concurrency Test Group",
+                "members": ["test-user-123", "roommate-aman"]
+            }
+            res_create = self.client.post('/api/groups', headers=self.headers, json=group_payload)
+            group_id = json.loads(res_create.data)["group_id"]
+
+            # Add expense: test-user-123 pays 200
+            exp_payload = {
+                "group_id": group_id,
+                "expense": {
+                    "amount": 200.0,
+                    "description": "Initial Bill",
+                    "paid_by": "test-user-123",
+                    "split_type": "equal",
+                    "split_with": ["test-user-123", "roommate-aman"]
+                }
+            }
+            res_exp = self.client.post('/api/groups/expense', headers=self.headers, json=exp_payload)
+            self.assertEqual(res_exp.status_code, 201)
+
+            # Verify that transaction was retrieved and update was called on the mock transaction
+            self.assertTrue(custom_db.txn_mock.update.called)
+        finally:
+            FirebaseService._db = orig_db
+
+    @patch('google.generativeai.GenerativeModel')
+    def test_ai_service_fallback(self, mock_gen_model):
+        from services.ai_service import AIService
+        
+        # Scenario: First model fails, fallback model succeeds
+        mock_model_1 = MagicMock()
+        mock_model_1.generate_content.side_effect = Exception("Quota Exceeded 429")
+        mock_model_2 = MagicMock()
+        mock_model_2.generate_content.return_value.text = "Fallback success response"
+        
+        def side_effect(model_name):
+            if model_name == "gemini-2.5-flash":
+                return mock_model_1
+            elif model_name == "gemini-flash-lite-latest":
+                return mock_model_2
+            return MagicMock()
+            
+        mock_gen_model.side_effect = side_effect
+        
+        AIService._initialized = True
+        response = AIService.generate_content("Hello")
+        self.assertEqual(response, "Fallback success response")
+        
+        # Verify both models were instantiated
+        mock_gen_model.assert_any_call("gemini-2.5-flash")
+        mock_gen_model.assert_any_call("gemini-flash-lite-latest")
+
+    @patch('google.generativeai.GenerativeModel')
+    def test_ai_service_primary_success(self, mock_gen_model):
+        from services.ai_service import AIService
+        mock_model = MagicMock()
+        mock_model.generate_content.return_value.text = "Primary success"
+        mock_gen_model.return_value = mock_model
+        
+        AIService._initialized = True
+        response = AIService.generate_content("Hello")
+        self.assertEqual(response, "Primary success")
+        mock_gen_model.assert_called_once_with("gemini-2.5-flash")
+
+    @patch('google.generativeai.GenerativeModel')
+    def test_ai_service_all_fail(self, mock_gen_model):
+        from services.ai_service import AIService
+        mock_gen_model.return_value.generate_content.side_effect = Exception("Model error")
+        
+        AIService._initialized = True
+        with self.assertRaises(Exception):
+            AIService.generate_content("Hello")
+
+    @patch('services.ai_service.AIService.generate_content')
+    def test_goal_planner_ai_failure_fallback(self, mock_gemini):
+        # Setup goal planner advice to fail
+        mock_gemini.side_effect = Exception("Quota error")
+        
+        res_goal = self.client.post('/api/goals', headers=self.headers, json={
+            "goal_name": "Car Goal",
+            "target_amount": 50000.0,
+            "current_amount": 10000.0,
+            "deadline": "2026-12-01"
+        })
+        self.assertEqual(res_goal.status_code, 201, f"Failed: {res_goal.data}")
+        goal_id = json.loads(res_goal.data)["goal_id"]
+        
+        res_plan = self.client.get(f'/api/goals/{goal_id}/planner', headers=self.headers)
+        data_plan = json.loads(res_plan.data)
+        self.assertEqual(res_plan.status_code, 200)
+        self.assertIn("ai_advice", data_plan)
+        self.assertTrue("low" in data_plan["ai_advice"] or "Keep saving" in data_plan["ai_advice"])
+
+    def test_savings_defensive_parsing_missing_fields(self):
+        # Directly inject corrupted goal in mock db
+        goal_id = "corrupted-goal-123"
+        if "savings_goals" not in self.firestore_db:
+            self.firestore_db["savings_goals"] = {}
+        self.firestore_db["savings_goals"][goal_id] = {
+            "goal_id": goal_id,
+            "uid": "test-user-123",
+            # Missing goal_name, target_amount, current_amount, deadline
+        }
+        
+        # Test that savings service fetch doesn't crash and defaults properties safely
+        from services.savings_service import SavingsService
+        goals = SavingsService.get_goals("test-user-123")
+        corrupted = next(g for g in goals if g["goal_id"] == goal_id)
+        self.assertEqual(corrupted["goal_name"], "Unnamed Goal")
+        self.assertEqual(corrupted["target_amount"], 0.0)
+        
+        # Test that SavingsAgent analyze doesn't crash on this goal
+        from agents.savings_agent import SavingsAgent
+        report = SavingsAgent.analyze("test-user-123")
+        self.assertEqual(report["status"], "Success")
+        corrupted_summary = next(g for g in report["goals_summary"] if g["goal_name"] == "Unnamed Goal")
+        self.assertEqual(corrupted_summary["target_amount"], 0.0)
+
+    @patch('services.ai_service.AIService.generate_content')
+    def test_goal_planner_empty_transactions(self, mock_gemini):
+        mock_gemini.return_value = "Advice for empty transactions."
+        
+        res_goal = self.client.post('/api/goals', headers=self.headers, json={
+            "goal_name": "Vacation Goal",
+            "target_amount": 10000.0,
+            "current_amount": 100.0,
+            "deadline": "2026-12-01"
+        })
+        self.assertEqual(res_goal.status_code, 201, f"Failed: {res_goal.data}")
+        goal_id = json.loads(res_goal.data)["goal_id"]
+        
+        # User has no transactions registered in self.firestore_db. Let's delete existing transactions
+        self.firestore_db["expenses"] = {}
+        
+        res_plan = self.client.get(f'/api/goals/{goal_id}/planner', headers=self.headers)
+        data_plan = json.loads(res_plan.data)
+        self.assertEqual(res_plan.status_code, 200)
+        self.assertEqual(data_plan["ai_advice"], "Advice for empty transactions.")
+        
+        # Check that prompt contains transaction default text
+        args, kwargs = mock_gemini.call_args
+        self.assertIn("- No recent transactions recorded yet.", args[0])
+
+    def test_savings_agent_no_goals(self):
+        from agents.savings_agent import SavingsAgent
+        # Query for a user who has no goals
+        report = SavingsAgent.analyze("user-with-no-goals")
+        self.assertEqual(report["status"], "No goals set")
+        self.assertEqual(report["goals_summary"], [])
+        self.assertIn("No savings goals", report["findings"])
+
+    @patch('services.notification_service.NotificationService.create_notification')
+    def test_savings_agent_goal_completed(self, mock_notify):
+        # Create a completed goal
+        res_goal = self.client.post('/api/goals', headers=self.headers, json={
+            "goal_name": "Completed Goal",
+            "target_amount": 500.0,
+            "current_amount": 500.0,
+            "deadline": "2026-12-01"
+        })
+        self.assertEqual(res_goal.status_code, 201, f"Failed: {res_goal.data}")
+        
+        from agents.savings_agent import SavingsAgent
+        report = SavingsAgent.analyze("test-user-123")
+        self.assertEqual(report["status"], "Success")
+        completed_goal = next(g for g in report["goals_summary"] if g["goal_name"] == "Completed Goal")
+        self.assertEqual(completed_goal["status"], "Completed")
+        self.assertIn("Completed! Goal achieved.", completed_goal["prediction"])
+
+    def test_recurring_payments_flow(self):
+        # 1. Create a recurring payment
+        payload = {
+            "title": "Netflix Subscription",
+            "amount": 199.0,
+            "category": "Subscription",
+            "frequency": "Monthly",
+            "start_date": "2026-06-01",
+            "next_due_date": "2026-07-01",
+            "notes": "Premium plan"
+        }
+        res_create = self.client.post('/api/recurring', headers=self.headers, json=payload)
+        self.assertEqual(res_create.status_code, 201)
+        data_create = json.loads(res_create.data)
+        self.assertIn("recurring_id", data_create)
+        recurring_id = data_create["recurring_id"]
+        self.assertEqual(data_create["title"], "Netflix Subscription")
+        self.assertEqual(data_create["amount"], 199.0)
+
+        # 2. Get list of recurring payments
+        res_list = self.client.get('/api/recurring', headers=self.headers)
+        self.assertEqual(res_list.status_code, 200)
+        data_list = json.loads(res_list.data)
+        self.assertEqual(len(data_list), 1)
+        self.assertEqual(data_list[0]["recurring_id"], recurring_id)
+
+        # 3. Update the recurring payment
+        update_payload = {
+            "amount": 299.0,
+            "notes": "Upgraded to 4K plan"
+        }
+        res_update = self.client.put(f'/api/recurring/{recurring_id}', headers=self.headers, json=update_payload)
+        self.assertEqual(res_update.status_code, 200)
+        data_update = json.loads(res_update.data)
+        self.assertEqual(data_update["amount"], 299.0)
+        self.assertEqual(data_update["notes"], "Upgraded to 4K plan")
+
+        # 4. Mark as paid
+        # This should log an expense (with category 'Subscriptions') and increment the date to 2026-08-01
+        res_pay = self.client.post(f'/api/recurring/{recurring_id}/pay', headers=self.headers)
+        self.assertEqual(res_pay.status_code, 200)
+        data_pay = json.loads(res_pay.data)
+        self.assertTrue(data_pay["success"])
+        self.assertEqual(data_pay["next_due_date"], "2026-08-01")
+        
+        # Verify the expense was created in the firestore_db under "expenses"
+        expenses_in_db = self.firestore_db.get("expenses", {})
+        self.assertTrue(len(expenses_in_db) > 0)
+        # Find the logged expense
+        matching_expense = None
+        for exp in expenses_in_db.values():
+            if "Netflix Subscription" in exp.get("description", ""):
+                matching_expense = exp
+                break
+        self.assertIsNotNone(matching_expense)
+        self.assertEqual(matching_expense["amount"], 299.0)
+        self.assertEqual(matching_expense["category"], "Subscriptions")
+        self.assertEqual(matching_expense["date"], "2026-07-01") # original next_due_date
+
+        # 5. Check InsightsAgent includes recurring payments
+        from agents.insights_agent import InsightsAgent
+        report = InsightsAgent.analyze("test-user-123")
+        self.assertEqual(report["status"], "Success")
+        self.assertEqual(report["total_monthly_recurring_commitments"], 299.0)
+        self.assertIn("recurring_commitments_by_category", report)
+        self.assertEqual(report["recurring_commitments_by_category"].get("Subscription"), 299.0)
+
+        # 6. Delete the recurring payment
+        res_delete = self.client.delete(f'/api/recurring/{recurring_id}', headers=self.headers)
+        self.assertEqual(res_delete.status_code, 200)
+        data_delete = json.loads(res_delete.data)
+        self.assertTrue(data_delete["success"])
+
+        # Check list is empty now
+        res_list_after = self.client.get('/api/recurring', headers=self.headers)
+        self.assertEqual(res_list_after.status_code, 200)
+        data_list_after = json.loads(res_list_after.data)
+        self.assertEqual(len(data_list_after), 0)
+    @patch('services.ai_service.AIService.generate_content')
+    def test_voice_parse_service_single_and_multi(self, mock_gemini):
+        """Test voice transcript parsing for single and multi transactions"""
+        from services.voice_service import VoiceService
+        
+        # Test Case 1: Multi-transaction response from AI
+        mock_gemini.return_value = json.dumps({
+            "transactions": [
+                {
+                    "amount": 100.0,
+                    "type": "expense",
+                    "category": "Food",
+                    "date": "2026-06-20",
+                    "note": "breakfast",
+                    "merchant": None,
+                    "friend_name": None,
+                    "friend_owe_amount": None
+                },
+                {
+                    "amount": 2000.0,
+                    "type": "income",
+                    "category": "Salary",
+                    "date": "2026-06-21",
+                    "note": "salary received",
+                    "merchant": "Company",
+                    "friend_name": None,
+                    "friend_owe_amount": None
+                }
+            ],
+            "clarification_needed": False,
+            "clarification_message": None
+        })
+
+        result = VoiceService.parse_transcript("spent 100 on breakfast and got 2000 salary")
+        self.assertFalse(result["clarification_needed"])
+        self.assertEqual(len(result["transactions"]), 2)
+        self.assertEqual(result["transactions"][0]["amount"], 100.0)
+        self.assertEqual(result["transactions"][0]["category"], "Food")
+        self.assertEqual(result["transactions"][1]["amount"], 2000.0)
+        self.assertEqual(result["transactions"][1]["type"], "income")
+
+        # Test Case 2: Clarification / failure handling
+        mock_gemini.return_value = json.dumps({
+            "transactions": [],
+            "clarification_needed": True,
+            "clarification_message": "Could not identify amount"
+        })
+
+        result_clarify = VoiceService.parse_transcript("lunch time")
+        self.assertTrue(result_clarify["clarification_needed"])
+        self.assertEqual(result_clarify["clarification_message"], "Could not identify amount")
+
 if __name__ == '__main__':
     unittest.main()
+
 

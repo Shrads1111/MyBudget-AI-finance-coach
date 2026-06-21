@@ -1,6 +1,7 @@
 import datetime
 from services.savings_service import SavingsService
 from services.expense_service import ExpenseService
+from services.ai_service import AIService
 from middleware.error_handler import APIError
 import logging
 
@@ -81,6 +82,43 @@ class GoalPlannerService:
                     ratio = monthly_saving_capacity / monthly_target if monthly_target > 0 else 0
                     completion_probability = int(max(10, ratio * 85))
 
+            # 5. Generate AI advice
+            ai_advice = ""
+            try:
+                recent_expenses = ExpenseService.get_expenses(uid, limit=20).get("expenses", [])
+                expenses_summary = []
+                for e in recent_expenses[:5]:
+                    category = e.get("category", "Other")
+                    amount = e.get("amount", 0.0)
+                    date_str = e.get("date", "")
+                    expenses_summary.append(f"- Category: {category}, Amount: ₹{amount}, Date: {date_str}")
+                
+                expenses_text = "\n".join(expenses_summary) if expenses_summary else "- No recent transactions recorded yet."
+                
+                prompt = f"""
+You are the AI Financial Coach for the MyBudget app.
+The user is saving for this milestone:
+- Goal Name: {goal.get("goal_name", "Savings Target")}
+- Target: ₹{target}
+- Current Saved: ₹{current}
+- Deadline: {deadline}
+- Monthly Target Savings Required: ₹{round(monthly_target)}
+- Est. Achievement Probability: {completion_probability}%
+
+Here are some of their recent transactions:
+{expenses_text}
+
+Provide a short, highly personalized 2-sentence AI savings tip/recommendation for this specific goal. Keep it actionable and encouraging. Do not use markdown header tags.
+"""
+                ai_advice = AIService.generate_content(prompt)
+            except Exception as e:
+                logger.error(f"Failed to generate AI advice for goal planner: {str(e)}")
+                # Mathematical fallback
+                if completion_probability < 50:
+                    ai_advice = f"Your goal completion likelihood is low ({completion_probability}%). Consider reducing discretionary expenses or extending your deadline."
+                else:
+                    ai_advice = f"You are on track! Keep saving ₹{round(monthly_target)} monthly to achieve your goal by {deadline}."
+
             return {
                 "goal_id": goal_id,
                 "goal_name": goal.get("goal_name"),
@@ -92,7 +130,8 @@ class GoalPlannerService:
                 "weekly_target": round(weekly_target),
                 "daily_target": round(daily_target),
                 "completion_probability": completion_probability,
-                "estimated_completion_date": deadline
+                "estimated_completion_date": deadline,
+                "ai_advice": ai_advice.strip()
             }
         except Exception as e:
             logger.error(f"Error generating goal plan for {goal_id}: {str(e)}")

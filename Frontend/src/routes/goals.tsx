@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
-import { Plus, Trash2, X, AlertCircle, Sparkles, CheckCircle } from "lucide-react";
+import { Plus, Trash2, X, AlertCircle, Sparkles, CheckCircle, Pencil } from "lucide-react";
 
 export const Route = createFileRoute("/goals")({
   head: () => ({ meta: [{ title: "Goals · MyBudget" }] }),
@@ -32,6 +32,7 @@ type GoalPlan = {
   daily_target: number;
   completion_probability: number;
   estimated_completion_date: string;
+  ai_advice?: string;
 };
 
 function GoalsPage() {
@@ -48,6 +49,8 @@ function GoalsPage() {
 
   // Dialog State
   const [open, setOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
+  const [contributeTargetGoal, setContributeTargetGoal] = useState<SavingsGoal | null>(null);
 
   // Fetch Goals
   const fetchGoals = async () => {
@@ -106,6 +109,18 @@ function GoalsPage() {
       fetchGoals();
     } catch (e: any) {
       alert("Failed to create savings goal: " + e.message);
+    }
+  };
+
+  // Edit goal
+  const handleEditGoal = async (goalId: string, payload: { goal_name: string; target_amount: number; current_amount: number; deadline: string }) => {
+    try {
+      await api.put(`/api/goals/${goalId}`, payload);
+      setOpen(false);
+      setEditingGoal(null);
+      fetchGoals();
+    } catch (e: any) {
+      alert("Failed to update savings goal: " + e.message);
     }
   };
 
@@ -192,9 +207,29 @@ function GoalsPage() {
                         </div>
                         <div className="text-xs text-muted-foreground mt-0.5">Deadline: {g.deadline}</div>
                       </div>
-                      <button onClick={(e) => { e.stopPropagation(); handleDeleteGoal(g.goal_id); }} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface" aria-label="Delete">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setEditingGoal(g); 
+                            setOpen(true); 
+                          }} 
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface transition cursor-pointer" 
+                          aria-label="Edit"
+                        >
+                          <Pencil className="h-4.5 w-4.5" />
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            handleDeleteGoal(g.goal_id); 
+                          }} 
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface transition cursor-pointer" 
+                          aria-label="Delete"
+                        >
+                          <Trash2 className="h-4.5 w-4.5" />
+                        </button>
+                      </div>
                     </div>
 
                     <div className="mt-4">
@@ -208,8 +243,17 @@ function GoalsPage() {
                       <div className="flex justify-between items-center mt-3">
                         <span className="text-xs text-primary font-semibold">{pct.toFixed(0)}% Complete</span>
                         <div className="flex gap-2">
-                          <button onClick={(e) => { e.stopPropagation(); handleContribute(g.goal_id, 500); }} className="text-[10px] px-2 py-1 rounded border border-border bg-background hover:bg-surface-hover">+₹500</button>
-                          <button onClick={(e) => { e.stopPropagation(); handleContribute(g.goal_id, 2000); }} className="text-[10px] px-2 py-1 rounded border border-border bg-background hover:bg-surface-hover">+₹2k</button>
+                          <button onClick={(e) => { e.stopPropagation(); handleContribute(g.goal_id, 500); }} className="text-[10px] px-2 py-1 rounded border border-border bg-background hover:bg-surface-hover cursor-pointer">+₹500</button>
+                          <button onClick={(e) => { e.stopPropagation(); handleContribute(g.goal_id, 2000); }} className="text-[10px] px-2 py-1 rounded border border-border bg-background hover:bg-surface-hover cursor-pointer">+₹2k</button>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setContributeTargetGoal(g); 
+                            }} 
+                            className="text-[10px] px-2 py-1 rounded border border-primary text-primary bg-primary/5 hover:bg-primary/10 transition cursor-pointer font-medium"
+                          >
+                            + Custom
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -274,6 +318,17 @@ function GoalsPage() {
                     <div className="text-xs text-muted-foreground leading-relaxed bg-background p-3 rounded-xl border border-border">
                       To reach your target of ₹{selectedGoal.target_amount.toLocaleString()} for {selectedGoal.goal_name} by {goalPlan.estimated_completion_date}, you must contribute ₹{goalPlan.monthly_target.toLocaleString()} monthly. At your current transaction rate, we estimate a {goalPlan.completion_probability}% probability of achieving this on schedule.
                     </div>
+
+                    {goalPlan.ai_advice && (
+                      <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                          <Sparkles className="h-3.5 w-3.5" /> AI Coach Advice
+                        </div>
+                        <p className="text-xs text-foreground leading-relaxed">
+                          {goalPlan.ai_advice}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="text-center py-6 text-xs text-muted-foreground">
@@ -290,16 +345,49 @@ function GoalsPage() {
         </div>
       )}
 
-      {open && <AddGoalDialog onClose={() => setOpen(false)} onAdd={handleAddGoal} />}
+      {open && (
+        <AddGoalDialog 
+          onClose={() => {
+            setOpen(false);
+            setEditingGoal(null);
+          }} 
+          onAdd={async (payload) => {
+            if (editingGoal) {
+              await handleEditGoal(editingGoal.goal_id, payload);
+            } else {
+              await handleAddGoal(payload);
+            }
+          }} 
+          goalToEdit={editingGoal}
+        />
+      )}
+
+      {contributeTargetGoal && (
+        <ContributeDialog
+          onClose={() => setContributeTargetGoal(null)}
+          onContribute={async (amount) => {
+            await handleContribute(contributeTargetGoal.goal_id, amount);
+            setContributeTargetGoal(null);
+          }}
+        />
+      )}
     </div>
   );
 }
 
-function AddGoalDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (g: { goal_name: string; target_amount: number; current_amount: number; deadline: string }) => void }) {
-  const [name, setName] = useState("");
-  const [target, setTarget] = useState("");
-  const [current, setCurrent] = useState("0");
-  const [deadline, setDeadline] = useState("");
+function AddGoalDialog({ 
+  onClose, 
+  onAdd, 
+  goalToEdit 
+}: { 
+  onClose: () => void; 
+  onAdd: (g: { goal_name: string; target_amount: number; current_amount: number; deadline: string }) => void;
+  goalToEdit?: SavingsGoal | null;
+}) {
+  const [name, setName] = useState(goalToEdit?.goal_name || "");
+  const [target, setTarget] = useState(goalToEdit?.target_amount?.toString() || "");
+  const [current, setCurrent] = useState(goalToEdit?.current_amount?.toString() || "0");
+  const [deadline, setDeadline] = useState(goalToEdit?.deadline || "");
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -308,9 +396,9 @@ function AddGoalDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (g: { g
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm grid place-items-center p-4">
-      <form onSubmit={submit} className="w-full max-w-md rounded-2xl border border-border bg-background p-6 space-y-4">
+      <form onSubmit={submit} className="w-full max-w-md rounded-2xl border border-border bg-background p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">New savings target</h2>
+          <h2 className="text-lg font-semibold">{goalToEdit ? "Edit savings target" : "New savings target"}</h2>
           <button type="button" onClick={onClose} className="p-1 rounded-lg hover:bg-surface"><X className="h-4 w-4" /></button>
         </div>
 
@@ -319,7 +407,9 @@ function AddGoalDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (g: { g
         <Input label="Initial Saved (₹)" value={current} onChange={setCurrent} type="number" required />
         <Input label="Deadline" value={deadline} onChange={setDeadline} type="date" required />
 
-        <button type="submit" className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary-hover">Save</button>
+        <button type="submit" className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary-hover shadow-md">
+          {goalToEdit ? "Save Changes" : "Save"}
+        </button>
       </form>
     </div>
   );
@@ -331,5 +421,48 @@ function Input({ label, value, onChange, type = "text", required }: { label: str
       <div className="text-xs text-muted-foreground mb-1">{label}</div>
       <input value={value} onChange={(e) => onChange(e.target.value)} type={type} required={required} className="w-full h-10 rounded-xl bg-surface border border-border px-3 text-sm focus:outline-none focus:border-primary text-foreground" />
     </label>
+  );
+}
+
+function ContributeDialog({ 
+  onClose, 
+  onContribute 
+}: { 
+  onClose: () => void; 
+  onContribute: (amount: number) => void;
+}) {
+  const [amount, setAmount] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const num = parseFloat(amount);
+    if (!isNaN(num) && num > 0) {
+      onContribute(num);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm grid place-items-center p-4">
+      <form onSubmit={submit} className="w-full max-w-sm rounded-2xl border border-border bg-background p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Add Saved Amount</h2>
+          <button type="button" onClick={onClose} className="p-1 rounded-lg hover:bg-surface"><X className="h-4 w-4" /></button>
+        </div>
+
+        <label className="block">
+          <div className="text-xs text-muted-foreground mb-1">Enter Amount to Add (₹)</div>
+          <input 
+            value={amount} 
+            onChange={(e) => setAmount(e.target.value)} 
+            type="number" 
+            required 
+            placeholder="e.g. 1500" 
+            className="w-full h-10 rounded-xl bg-surface border border-border px-3 text-sm focus:outline-none focus:border-primary text-foreground" 
+          />
+        </label>
+
+        <button type="submit" className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary-hover shadow-md">Add to Savings</button>
+      </form>
+    </div>
   );
 }

@@ -126,11 +126,9 @@ class SavingsService:
             for doc in docs:
                 g_data = doc.to_dict()
                 
-                # Re-calculate read properties dynamically to ensure correctness
+                # Re-calculate read properties dynamically and apply model defaults
                 goal_obj = SavingsGoal.from_dict(g_data)
-                g_data["progress_percentage"] = goal_obj.progress_percentage
-                g_data["remaining_amount"] = goal_obj.remaining_amount
-                g_data["monthly_saving_needed"] = goal_obj.get_monthly_saving_needed()
+                g_data = goal_obj.to_dict()
                 
                 SavingsService.check_and_trigger_goal_notifications(uid, g_data)
                 goals.append(g_data)
@@ -150,11 +148,10 @@ class SavingsService:
             g_data = doc.to_dict()
             if g_data.get("uid") != uid:
                 raise APIError("Access denied", status_code=403)
-
+            
+            # Apply model defaults and calculate properties
             goal_obj = SavingsGoal.from_dict(g_data)
-            g_data["progress_percentage"] = goal_obj.progress_percentage
-            g_data["remaining_amount"] = goal_obj.remaining_amount
-            g_data["monthly_saving_needed"] = goal_obj.get_monthly_saving_needed()
+            g_data = goal_obj.to_dict()
             
             SavingsService.check_and_trigger_goal_notifications(uid, g_data)
             return g_data

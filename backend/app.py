@@ -63,6 +63,9 @@ def create_app():
     from routes.report_routes import report_bp
     from routes.simulator_routes import simulator_bp
     from routes.account_routes import account_bp
+    from routes.category_routes import category_bp
+    from routes.voice_routes import voice_bp
+    from routes.recurring_routes import recurring_bp
 
     # Register blueprints
     app.register_blueprint(user_bp)
@@ -79,6 +82,9 @@ def create_app():
     app.register_blueprint(report_bp)
     app.register_blueprint(simulator_bp)
     app.register_blueprint(account_bp)
+    app.register_blueprint(category_bp)
+    app.register_blueprint(voice_bp)
+    app.register_blueprint(recurring_bp)
 
 
     @app.route('/health', methods=['GET'])

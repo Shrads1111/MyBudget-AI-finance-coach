@@ -147,8 +147,8 @@ function BudgetPage() {
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "you" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${m.role === "you" ? "bg-primary text-primary-foreground" : "bg-background border border-border"}`}>
-                  {m.text}
+                <div className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${m.role === "you" ? "bg-primary text-primary-foreground whitespace-pre-wrap" : "bg-background border border-border"}`}>
+                  {m.role === "you" ? m.text : <MarkdownRenderer text={m.text} />}
                 </div>
               </div>
             ))}
@@ -293,4 +293,75 @@ function AddBudgetDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (b: {
       </form>
     </div>
   );
+}
+
+function MarkdownRenderer({ text }: { text: string }) {
+  const lines = text.split("\n");
+  return (
+    <div className="space-y-2">
+      {lines.map((line, lineIdx) => {
+        const trimmed = line.trim();
+        
+        if (trimmed.startsWith("###")) {
+          const headerText = trimmed.replace(/^###\s*/, "");
+          return (
+            <h3 key={lineIdx} className="text-sm font-semibold text-foreground mt-3 mb-1 flex items-center gap-1.5">
+              {renderBoldText(headerText)}
+            </h3>
+          );
+        }
+        if (trimmed.startsWith("##")) {
+          const headerText = trimmed.replace(/^##\s*/, "");
+          return (
+            <h2 key={lineIdx} className="text-base font-bold text-foreground mt-4 mb-1.5 flex items-center gap-1.5">
+              {renderBoldText(headerText)}
+            </h2>
+          );
+        }
+        if (trimmed.startsWith("#")) {
+          const headerText = trimmed.replace(/^#\s*/, "");
+          return (
+            <h1 key={lineIdx} className="text-lg font-extrabold text-foreground mt-4 mb-2 flex items-center gap-1.5">
+              {renderBoldText(headerText)}
+            </h1>
+          );
+        }
+
+        const isBullet = trimmed.startsWith("* ") || trimmed.startsWith("- ");
+        if (isBullet) {
+          const bulletText = trimmed.replace(/^[\*\-]\s*/, "");
+          return (
+            <div key={lineIdx} className="pl-4 flex items-start gap-2 text-sm leading-relaxed text-muted-foreground my-1">
+              <span className="text-primary mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="flex-1">{renderBoldText(bulletText)}</span>
+            </div>
+          );
+        }
+
+        if (trimmed === "") {
+          return <div key={lineIdx} className="h-1.5" />;
+        }
+
+        return (
+          <p key={lineIdx} className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+            {renderBoldText(line)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+function renderBoldText(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index} className="font-semibold text-foreground">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
 }

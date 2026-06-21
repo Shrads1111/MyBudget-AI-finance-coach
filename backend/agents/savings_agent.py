@@ -27,49 +27,56 @@ class SavingsAgent:
             behind_count = 0
 
             for g in goals:
-                target = float(g["target_amount"])
-                current = float(g["current_amount"])
-                progress = float(g["progress_percentage"])
-                remaining = float(g["remaining_amount"])
-                monthly_saving_needed = float(g["monthly_saving_needed"])
-                
-                goal_item = {
-                    "goal_name": g["goal_name"],
-                    "target_amount": target,
-                    "current_amount": current,
-                    "progress_percentage": progress,
-                    "remaining_amount": remaining,
-                    "monthly_saving_needed": monthly_saving_needed,
-                    "deadline": g["deadline"]
-                }
+                try:
+                    target = float(g.get("target_amount") or 0.0)
+                    current = float(g.get("current_amount") or 0.0)
+                    progress = float(g.get("progress_percentage") or 0.0)
+                    remaining = float(g.get("remaining_amount") or 0.0)
+                    monthly_saving_needed = float(g.get("monthly_saving_needed") or 0.0)
+                    
+                    goal_item = {
+                        "goal_name": g.get("goal_name") or "Unnamed Goal",
+                        "target_amount": target,
+                        "current_amount": current,
+                        "progress_percentage": progress,
+                        "remaining_amount": remaining,
+                        "monthly_saving_needed": monthly_saving_needed,
+                        "deadline": g.get("deadline") or ""
+                    }
 
-                if progress >= 100.0:
-                    goal_item["status"] = "Completed"
-                    goal_item["prediction"] = "Completed! Goal achieved."
-                    completed_goals_count += 1
-                else:
-                    # Basic projection
-                    try:
-                        deadline_date = datetime.strptime(g["deadline"], "%Y-%m-%d").date()
-                        today = datetime.utcnow().date()
-                        days_left = (deadline_date - today).days
-                        
-                        if days_left <= 0:
-                            goal_item["status"] = "Overdue"
-                            goal_item["prediction"] = "Deadline has passed. Need to revise goal deadline."
-                            behind_count += 1
-                        else:
-                            # Assume active savings rate is based on current/days since creation
-                            # (Simplification: if they have saved some amount already, we assume a basic trend,
-                            # otherwise we warn that they need to save monthly_saving_needed)
+                    if progress >= 100.0:
+                        goal_item["status"] = "Completed"
+                        goal_item["prediction"] = "Completed! Goal achieved."
+                        completed_goals_count += 1
+                    else:
+                        # Basic projection
+                        deadline_str = g.get("deadline")
+                        if not deadline_str:
                             goal_item["status"] = "Active"
-                            goal_item["prediction"] = f"On track if you save ₹{monthly_saving_needed:.2f} per month until the deadline."
+                            goal_item["prediction"] = f"On track if you save ₹{monthly_saving_needed:.2f} per month."
                             on_track_count += 1
-                    except Exception:
-                        goal_item["status"] = "Unknown"
-                        goal_item["prediction"] = "Unable to estimate deadline status due to invalid date layout."
-                
-                goals_summary.append(goal_item)
+                        else:
+                            try:
+                                deadline_date = datetime.strptime(deadline_str, "%Y-%m-%d").date()
+                                today = datetime.utcnow().date()
+                                days_left = (deadline_date - today).days
+                                
+                                if days_left <= 0:
+                                    goal_item["status"] = "Overdue"
+                                    goal_item["prediction"] = "Deadline has passed. Need to revise goal deadline."
+                                    behind_count += 1
+                                else:
+                                    goal_item["status"] = "Active"
+                                    goal_item["prediction"] = f"On track if you save ₹{monthly_saving_needed:.2f} per month until the deadline."
+                                    on_track_count += 1
+                            except Exception:
+                                goal_item["status"] = "Unknown"
+                                goal_item["prediction"] = "Unable to estimate deadline status due to invalid date layout."
+                    
+                    goals_summary.append(goal_item)
+                except Exception as inner_ex:
+                    logger.error(f"Failed to process individual goal in agent analysis: {str(inner_ex)}")
+                    continue
 
             findings = f"You have {len(goals)} active savings goals. {completed_goals_count} completed, {on_track_count} on track."
 

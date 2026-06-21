@@ -26,11 +26,12 @@ class Validator:
 
     @staticmethod
     def validate_expense_category(category):
-        if not category:
+        # Accept any non-empty string — this allows custom user-defined categories
+        # while still rejecting missing/null values.
+        # Budget categories remain strictly validated separately.
+        if not category or not str(category).strip():
             raise APIError("category is required", status_code=400)
-        if category not in EXPENSE_CATEGORIES:
-            raise APIError(f"Invalid category. Allowed: {', '.join(EXPENSE_CATEGORIES)}", status_code=400)
-        return category
+        return str(category).strip()
 
     @staticmethod
     def validate_budget_category(category):

@@ -1,37 +1,37 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
   CreditCard,
-  Filter,
-  MoreHorizontal,
-  Plus,
-  Search,
   Sparkles,
-  TrendingUp,
   Download,
   AlertCircle,
   Play
 } from "lucide-react";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
   Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis,
 } from "recharts";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { VoiceMicButton } from "@/components/VoiceTransaction";
 
 type DashboardSummary = {
   summary: {
     total_expenses: number;
     monthly_expenses: number;
     active_goals_count: number;
+    total_balance: number;
+    total_income: number;
+    friend_owe: number;
+    friend_owe_you?: number;
+    friend_you_owe?: number;
+    friend_net?: number;
   };
   budget_utilization: Array<{
     category: string;
@@ -52,6 +52,7 @@ type DashboardSummary = {
     category: string;
     total_amount: number;
   }>;
+  expense_by_category: Record<string, { amount: number; percentage: number }>;
   recent_transactions: Array<{
     expense_id: string;
     amount: number;
@@ -108,34 +109,34 @@ export function Dashboard() {
   const [simLoading, setSimLoading] = useState(false);
   const [simError, setSimError] = useState<string | null>(null);
 
+  // Lifted outside useEffect so voice save handler can call it too
+  const fetchAllData = useCallback(async () => {
+    if (!token) return;
+    try {
+      setLoading(true);
+      setErr(null);
+
+      const [sumRes, healthRes, patternRes] = await Promise.all([
+        api.get("/api/dashboard/summary"),
+        api.get("/api/health-score"),
+        api.get("/api/analytics/patterns")
+      ]);
+
+      setSummary(sumRes);
+      setHealth(healthRes);
+      setPatterns(patternRes);
+    } catch (e: any) {
+      console.error("Dashboard fetch error:", e);
+      setErr(e.message || "Failed to load dashboard data.");
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
   // Syncing details when auth token is present
   useEffect(() => {
-    if (!token) return;
-
-    const fetchAllData = async () => {
-      try {
-        setLoading(true);
-        setErr(null);
-        
-        const [sumRes, healthRes, patternRes] = await Promise.all([
-          api.get("/api/dashboard/summary"),
-          api.get("/api/health-score"),
-          api.get("/api/analytics/patterns")
-        ]);
-
-        setSummary(sumRes);
-        setHealth(healthRes);
-        setPatterns(patternRes);
-      } catch (e: any) {
-        console.error("Dashboard fetch error:", e);
-        setErr(e.message || "Failed to load dashboard data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAllData();
-  }, [token]);
+  }, [fetchAllData]);
 
   // Report Download Trigger
   const downloadReport = async () => {
@@ -151,6 +152,12 @@ export function Dashboard() {
     } catch (e: any) {
       alert("Error generating report: " + e.message);
     }
+  };
+
+  // Voice transaction save — posts to existing /api/expenses then refreshes dashboard
+  const handleVoiceSave = async (payloads: Array<{ amount: number; category: string; description: string; date: string }>) => {
+    await Promise.all(payloads.map(payload => api.post("/api/expenses", payload)));
+    fetchAllData();
   };
 
   // Run AI Simulation
@@ -197,16 +204,27 @@ export function Dashboard() {
   const totalExpenses = summary?.summary.total_expenses || 0;
   const monthlyExpenses = summary?.summary.monthly_expenses || 0;
   const activeGoals = summary?.summary.active_goals_count || 0;
+  const totalBalance = summary?.summary.total_balance ?? 0;
+  const friendOwe = summary?.summary.friend_owe ?? 0;
+  const friendOweYou = summary?.summary.friend_owe_you ?? 0;
+  const friendYouOwe = summary?.summary.friend_you_owe ?? 0;
+  const friendNet = summary?.summary.friend_net ?? 0;
+
+  // Build pie chart data from expense_by_category
+  const PIE_COLORS = [
+    "#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6",
+    "#8b5cf6", "#ec4899", "#14b8a6", "#f97316", "#84cc16",
+    "#a855f7", "#06b6d4"
+  ];
+  const pieData = Object.entries(summary?.expense_by_category || {}).map(
+    ([name, val]) => ({ name, value: val.amount, percentage: val.percentage })
+  ).sort((a, b) => b.value - a.value);
 
   // Render recent activities
   const recentActivities = summary?.recent_transactions || [];
 
-  // Render chart data from budgets
-  const budgetChartData = summary?.budget_utilization.map(b => ({
-    category: b.category,
-    limit: b.limit,
-    spent: b.spent
-  })) || [];
+
+
 
   return (
     <div className="max-w-[1400px] mx-auto space-y-8">
@@ -217,26 +235,32 @@ export function Dashboard() {
           <p className="text-sm text-muted-foreground mt-1">Here is a real-time summary of your balances, budgets, and savings.</p>
         </div>
         <div className="flex items-center gap-2">
+          <VoiceMicButton onConfirm={handleVoiceSave} />
           <button onClick={downloadReport} className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-border bg-surface text-sm hover:bg-surface-hover transition">
             <Download className="h-4 w-4" /> Download Report
           </button>
         </div>
       </div>
 
-      {/* KPI Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* KPI Row — 4 cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Card 1: Total Balance */}
         <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground">Current Month Spend</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Total Balance</div>
           <div className="mt-4 flex items-end justify-between">
-            <div className="text-3xl font-semibold tracking-tight">₹{monthlyExpenses.toLocaleString()}</div>
-            <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-success/10 text-success">
-              <TrendingUp className="h-3 w-3" /> Live
+            <div className={`text-3xl font-semibold tracking-tight ${totalBalance >= 0 ? "" : "text-destructive"}`}>
+              ₹{Math.abs(totalBalance).toLocaleString()}
+            </div>
+            <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${totalBalance >= 0 ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>
+              {totalBalance >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+              {totalBalance >= 0 ? "Surplus" : "Deficit"}
             </span>
           </div>
         </div>
 
+        {/* Card 2: Total Spend */}
         <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground">Total Tally Spend</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">Total Spend</div>
           <div className="mt-4 flex items-end justify-between">
             <div className="text-3xl font-semibold tracking-tight">₹{totalExpenses.toLocaleString()}</div>
             <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-primary/10 text-primary">
@@ -245,6 +269,28 @@ export function Dashboard() {
           </div>
         </div>
 
+        {/* Card 3: Friend Owe */}
+        <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] flex flex-col justify-between min-h-[120px]">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Friend Owe</div>
+          <div className="mt-3 space-y-2">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">People Owe You:</span>
+              <span className="font-semibold text-emerald-500">₹{friendOweYou.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">You Owe Others:</span>
+              <span className="font-semibold text-rose-500">₹{friendYouOwe.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm pt-1.5 border-t border-border/50">
+              <span className="font-medium text-foreground">Net:</span>
+              <span className={`font-bold ${friendNet >= 0 ? "text-emerald-500" : "text-rose-500"}`}>
+                {friendNet >= 0 ? "+" : ""}₹{friendNet.toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Active Savings Targets */}
         <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Active Savings Targets</div>
           <div className="mt-4 flex items-end justify-between">
@@ -326,40 +372,58 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Budgets Chart */}
+        {/* Daily Expense Breakdown — Pie Chart */}
         <div className="lg:col-span-2 rounded-2xl bg-card border border-border p-6 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <div className="text-sm font-medium">Budget Limits vs Spending</div>
-              <div className="text-xs text-muted-foreground">Current monthly caps utilization</div>
-            </div>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Spent</span>
-              <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-foreground" /> Limit</span>
+              <div className="text-sm font-medium">Daily Expense Breakdown</div>
+              <div className="text-xs text-muted-foreground">Spending distribution across all categories</div>
             </div>
           </div>
-          <div className="h-[260px] -ml-3">
-            {budgetChartData.length > 0 ? (
+          <div className="h-[260px]">
+            {pieData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={budgetChartData} barGap={6}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" />
-                  <XAxis dataKey="category" axisLine={false} tickLine={false} tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }} />
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="40%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={100}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {pieData.map((_, i) => (
+                      <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
                   <Tooltip
-                    cursor={{ fill: "var(--color-surface-hover)" }}
-                    contentStyle={{ background: "var(--color-card)", border: "1px solid var(--color-border)", borderRadius: 12, fontSize: 12 }}
+                    contentStyle={{
+                      background: "var(--color-card)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 12,
+                      fontSize: 12,
+                    }}
+                    formatter={(value: any, name: any, props: any) => [
+                      `₹${Number(value).toLocaleString()} (${props.payload.percentage}%)`,
+                      name,
+                    ]}
                   />
-                  <Bar dataKey="spent" radius={[6, 6, 0, 0]} maxBarSize={22}>
-                    {budgetChartData.map((_, i) => <Cell key={i} fill="var(--color-primary)" />)}
-                  </Bar>
-                  <Bar dataKey="limit" radius={[6, 6, 0, 0]} maxBarSize={22}>
-                    {budgetChartData.map((_, i) => <Cell key={i} fill="var(--color-foreground)" />)}
-                  </Bar>
-                </BarChart>
+                  <Legend
+                    layout="vertical"
+                    align="right"
+                    verticalAlign="middle"
+                    iconType="circle"
+                    iconSize={8}
+                    formatter={(value) => (
+                      <span style={{ fontSize: 11, color: "var(--color-foreground)" }}>{value}</span>
+                    )}
+                  />
+                </PieChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
-                No active budgets configured.
+                No expenses recorded yet.
               </div>
             )}
           </div>

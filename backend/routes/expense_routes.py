@@ -57,3 +57,80 @@ def update_expense(id):
 def delete_expense(id):
     result = ExpenseService.delete_expense(g.uid, id)
     return jsonify(result), 200
+
+@expense_bp.route('/api/transactions/import-pdf', methods=['POST'])
+@token_required
+def import_pdf_transactions():
+    """
+    Receives an uploaded PDF file, validates it, extracts text,
+    parses transactions using AI, runs duplicate detection, and returns the result.
+    """
+    import os
+    import logging
+    from services.pdf_import_service import PDFImportService
+
+    logger = logging.getLogger(__name__)
+
+    # 1. Validate file exists in request
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No file selected"}), 400
+
+    # Validate file extension
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({"error": "Only PDF files are supported"}), 400
+
+    # 2. Validate file size (max 20 MB)
+    try:
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0)  # Reset pointer to beginning of file
+        if file_size > 20 * 1024 * 1024:
+            return jsonify({"error": "File size exceeds the 20 MB limit"}), 400
+    except Exception as e:
+        return jsonify({"error": f"Failed to check file size: {str(e)}"}), 400
+
+    # 3. Save to a temporary file
+    temp_path = None
+    try:
+        # Create temp folder inside workspace if it doesn't exist
+        temp_dir = os.path.join(os.path.dirname(__file__), "..", "temp")
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        # Use a unique identifier to avoid conflicts
+        import uuid
+        temp_path = os.path.join(temp_dir, f"import_{g.uid}_{uuid.uuid4().hex}.pdf")
+        file.save(temp_path)
+
+        # 4. Extract text
+        extracted_text = PDFImportService.extract_text(temp_path)
+        if not extracted_text or len(extracted_text.strip()) < 10:
+            return jsonify({"error": "Unable to extract transaction data from this PDF."}), 422
+
+        # 5. Parse transactions via AI
+        parsed = PDFImportService.parse_transactions(extracted_text)
+        if not parsed:
+            return jsonify({"error": "No transactions found."}), 422
+
+        # 6. Detect duplicates
+        analyzed = PDFImportService.detect_duplicates(g.uid, parsed)
+
+        return jsonify({
+            "success": True,
+            "transactions": analyzed
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error handling PDF import: {str(e)}")
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+
+    finally:
+        # 7. Secure cleanup of temporary file
+        if temp_path and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except Exception as ce:
+                logger.error(f"Cleanup error: failed to delete {temp_path}: {str(ce)}")

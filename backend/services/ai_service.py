@@ -23,10 +23,22 @@ class AIService:
     def generate_content(cls, prompt, model_name="gemini-2.5-flash"):
         if not cls._initialized:
             cls.initialize()
-        try:
-            model = genai.GenerativeModel(model_name)
-            response = model.generate_content(prompt)
-            return response.text
-        except Exception as e:
-            logger.error(f"Gemini generation failure: {str(e)}")
-            raise e
+        
+        models_to_try = [model_name]
+        # Append fallback model if it's not already the primary model
+        if "gemini-flash-lite-latest" not in models_to_try:
+            models_to_try.append("gemini-flash-lite-latest")
+            
+        last_error = None
+        for current_model in models_to_try:
+            try:
+                logger.info(f"Attempting Gemini generation with model: {current_model}")
+                model = genai.GenerativeModel(current_model)
+                response = model.generate_content(prompt)
+                return response.text
+            except Exception as e:
+                logger.warning(f"Gemini generation failed for model {current_model}: {str(e)}")
+                last_error = e
+        
+        logger.error("All Gemini models failed to generate content.")
+        raise last_error

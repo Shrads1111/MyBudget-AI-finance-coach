@@ -86,13 +86,17 @@ A user has asked a query, and we have run specialized database analysis agents t
 User Query: "{user_query}"
 
 Analyze the sub-agent reports below and synthesize a friendly, clear, and actionable response.
-Focus on being a helpful coach. Use bullet points and clean structure.
-If the sub-agent reports state that there is no data, advise the user how to get started (e.g. adding their first expense, budget, or savings goal).
+
+Formatting Rules:
+1. Tone: Energetic, encouraging, and clear (like a friendly financial coach).
+2. Emojis: Enrich the response with relevant emojis to make it highly engaging and visually appealing (e.g., 💸, 📊, 🎯, 🚀, 💡, 🛡️, ✅).
+3. Bullet Points: Use clear bullet points and bold headers to break down recommendations. Avoid long paragraphs.
+4. Further Related Questions: At the very end of your response, create a section titled "🔍 Further Questions You Can Ask:" with exactly 3 relevant, contextual follow-up questions that the user can ask next based on their current state and query.
 
 Special Context:
 {combined_context}
 
-Format your response using Markdown. Keep it conversational but professional.
+Format your response using Markdown.
 """
             final_response = AIService.generate_content(prompt)
 

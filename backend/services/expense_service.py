@@ -21,7 +21,7 @@ class ExpenseService:
         date = Validator.validate_date(data.get("date"))
         description = data.get("description", "")
 
-        expense_id = str(uuid.uuid4())
+        expense_id = data.get("expense_id") or str(uuid.uuid4())
         created_at = datetime.utcnow().isoformat()
         
         expense = Expense(

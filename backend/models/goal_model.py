@@ -56,7 +56,7 @@ class SavingsGoal:
         return cls(
             goal_id=data.get("goal_id"),
             uid=data.get("uid"),
-            goal_name=data.get("goal_name"),
+            goal_name=data.get("goal_name") or "Unnamed Goal",
             target_amount=data.get("target_amount", 0.0),
             current_amount=data.get("current_amount", 0.0),
             deadline=data.get("deadline")
