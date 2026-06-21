@@ -9,7 +9,8 @@ class Validator:
             val = float(amount)
             if val <= 0:
                 raise APIError(f"{field_name} must be greater than zero", status_code=400)
-            return val
+            # Normalize to two decimal places
+            return round(val, 2)
         except (ValueError, TypeError):
             raise APIError(f"{field_name} must be a valid number", status_code=400)
 
@@ -55,3 +56,33 @@ class Validator:
             return str(month_str)
         except ValueError:
             raise APIError("month must be in YYYY-MM format", status_code=400)
+
+    @staticmethod
+    def validate_allowed_fields(data: dict, allowed_fields: list):
+        """Reject any keys not explicitly allowed.
+        Raises APIError if unknown fields are present.
+        """
+        unknown = set(data.keys()) - set(allowed_fields)
+        if unknown:
+            raise APIError(f"Unsupported field(s): {', '.join(unknown)}", status_code=400)
+        return True
+
+    @staticmethod
+    def validate_positive_int(value, field_name="value"):
+        try:
+            iv = int(value)
+            if iv < 0:
+                raise APIError(f"{field_name} must be a non‑negative integer", status_code=400)
+            return iv
+        except (ValueError, TypeError):
+            raise APIError(f"{field_name} must be an integer", status_code=400)
+
+    @staticmethod
+    def validate_sort_params(sort_by: str, sort_order: str, allowed_sort_fields=None):
+        if allowed_sort_fields is None:
+            allowed_sort_fields = ["date", "amount", "category"]
+        if sort_by not in allowed_sort_fields:
+            raise APIError(f"Invalid sort_by field. Allowed: {', '.join(allowed_sort_fields)}", status_code=400)
+        if sort_order.lower() not in ["asc", "desc"]:
+            raise APIError("sort_order must be 'asc' or 'desc'", status_code=400)
+        return sort_by, sort_order.lower()

@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, date, timedelta
 import calendar
 import logging
-from services.firebase_service import FirebaseService
+# FirebaseService will be imported lazily in methods
 from models.recurring_model import RecurringPayment
 from services.expense_service import ExpenseService
 from utils.validator import Validator
@@ -44,6 +44,8 @@ def calculate_next_due_date(current_due_date_str, frequency):
 class RecurringService:
     @staticmethod
     def get_collection():
+        # Lazy import to avoid import-time failures
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("recurring_payments")
 

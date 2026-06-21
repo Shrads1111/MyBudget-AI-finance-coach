@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, g
 from middleware.auth_middleware import token_required
-from services.firebase_service import FirebaseService
+# FirebaseService will be imported lazily inside route handlers
 from models.user_model import User
 from datetime import datetime
 import logging
@@ -19,6 +19,7 @@ def sync_user():
     email = g.user_email
     name = g.user_name
     
+    from services.firebase_service import FirebaseService
     db = FirebaseService.get_db()
     user_ref = db.collection("users").document(uid)
     
@@ -65,6 +66,7 @@ def lookup_users():
     uids = data.get("uids", [])
     emails = data.get("emails", [])
     
+    from services.firebase_service import FirebaseService
     db = FirebaseService.get_db()
     profiles = {}
     

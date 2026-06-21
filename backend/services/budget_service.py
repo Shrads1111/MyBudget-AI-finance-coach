@@ -1,5 +1,5 @@
 import uuid
-from services.firebase_service import FirebaseService
+# FirebaseService will be imported lazily in methods
 from services.notification_service import NotificationService
 from models.budget_model import Budget
 from utils.validator import Validator
@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 class BudgetService:
     @staticmethod
     def get_collection():
+        # Lazy import to avoid heavy Firebase import at module load
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("budgets")
 
@@ -21,6 +23,7 @@ class BudgetService:
         updates the budget doc spent amount, and triggers alerts if necessary.
         """
         try:
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             expenses_ref = db.collection("expenses").where("uid", "==", uid).where("category", "==", category)
             expenses_docs = expenses_ref.stream()
@@ -71,6 +74,7 @@ class BudgetService:
             # Check if this alert has already been raised in the notifications log
             # to avoid duplicate notifications on every page load
             try:
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 existing_alerts = db.collection("notifications") \
                     .where("uid", "==", uid) \

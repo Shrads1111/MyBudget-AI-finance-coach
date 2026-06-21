@@ -1,4 +1,5 @@
-import google.generativeai as genai
+# google.generativeai is imported lazily inside methods to avoid
+# protobuf C-extension crash on Python 3.14 at import time.
 from config import Config
 import logging
 
@@ -11,6 +12,7 @@ class AIService:
     def initialize(cls):
         if not cls._initialized:
             try:
+                import google.generativeai as genai
                 Config.validate()
                 genai.configure(api_key=Config.GEMINI_API_KEY)
                 cls._initialized = True
@@ -21,6 +23,7 @@ class AIService:
 
     @classmethod
     def generate_content(cls, prompt, model_name="gemini-2.5-flash"):
+        import google.generativeai as genai
         if not cls._initialized:
             cls.initialize()
         

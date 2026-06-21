@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 from services.notification_service import NotificationService
 from models.goal_model import SavingsGoal
 from utils.validator import Validator
@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 class SavingsService:
     @staticmethod
     def get_collection():
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("savings_goals")
 
@@ -30,6 +31,7 @@ class SavingsService:
             title = f"Goal Completed! 🎉"
             message = f"Congratulations! You have achieved your savings goal '{name}' by saving ₹{current} of your ₹{target} target!"
             try:
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 existing = db.collection("notifications") \
                     .where("uid", "==", uid) \
@@ -63,6 +65,7 @@ class SavingsService:
                 title = f"Goal Deadline Nearing"
                 message = f"Your goal '{name}' is due in {days_left} days on {deadline}. You need ₹{target - current} more to complete it."
                 
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 existing = db.collection("notifications") \
                     .where("uid", "==", uid) \

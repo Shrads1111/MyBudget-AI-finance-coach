@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from services.firebase_service import FirebaseService
+# FirebaseService will be imported lazily in methods
 from models.expense_model import Expense
 from utils.validator import Validator
 from middleware.error_handler import APIError
@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 class ExpenseService:
     @staticmethod
     def get_collection():
+        # Lazy import to avoid heavy FirebaseAdmin import at module load
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("expenses")
 

@@ -1,6 +1,6 @@
 from services.expense_service import ExpenseService
 from services.group_service import GroupService
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 from utils.constants import is_income
 import logging
 
@@ -17,6 +17,7 @@ class FinanceCoachAgent:
             expenses = ExpenseService.get_expenses(uid, limit=100)["expenses"]
             
             # Check groups to see if they split flat bills
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             groups_docs = db.collection("group_budgets").where("members", "array_contains", uid).stream()
             group_count = len(list(groups_docs))

@@ -6,7 +6,7 @@ from agents.finance_coach_agent import FinanceCoachAgent
 from agents.forecasting_agent import ForecastingAgent
 from agents.health_score_agent import HealthScoreAgent
 from services.ai_service import AIService
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 from datetime import datetime
 import uuid
 import logging
@@ -17,6 +17,7 @@ class OrchestratorAgent:
     @staticmethod
     def save_conversation(uid, user_message, agent_response):
         try:
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             conv_id = str(uuid.uuid4())
             db.collection("ai_conversations").document(conv_id).set({

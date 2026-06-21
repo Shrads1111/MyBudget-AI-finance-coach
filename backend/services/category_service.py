@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 from utils.constants import EXPENSE_CATEGORIES
 from middleware.error_handler import APIError
 import logging
@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class CategoryService:
     @staticmethod
     def get_collection():
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("user_categories")
 

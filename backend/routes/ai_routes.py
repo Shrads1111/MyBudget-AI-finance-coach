@@ -1,10 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from middleware.auth_middleware import token_required
-from agents.orchestrator import OrchestratorAgent
-from agents.health_score_agent import HealthScoreAgent
-from agents.forecasting_agent import ForecastingAgent
-from agents.insights_agent import InsightsAgent
-from services.ai_service import AIService
+# All AI agent and service imports are lazy (inside handlers) to prevent
+# protobuf C-extension crash on Python 3.14 during blueprint import.
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,6 +15,11 @@ def analyze_finances():
     Analyzes user financial behavior and returns consolidated reports and recommendations.
     """
     try:
+        from agents.health_score_agent import HealthScoreAgent
+        from agents.forecasting_agent import ForecastingAgent
+        from agents.insights_agent import InsightsAgent
+        from services.ai_service import AIService
+
         health = HealthScoreAgent.analyze(g.uid)
         forecast = ForecastingAgent.analyze(g.uid)
         insights = InsightsAgent.analyze(g.uid)
@@ -57,6 +59,7 @@ def chat():
     """
     Orchestrated chat advisor endpoint.
     """
+    from agents.orchestrator import OrchestratorAgent
     data = request.get_json() or {}
     user_query = data.get("query")
     if not user_query:

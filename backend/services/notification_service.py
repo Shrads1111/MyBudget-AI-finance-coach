@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 import logging
 
 logger = logging.getLogger(__name__)
@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class NotificationService:
     @staticmethod
     def get_collection():
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("notifications")
 

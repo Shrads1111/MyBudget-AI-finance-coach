@@ -7,7 +7,7 @@ from reportlab.lib import colors
 from services.analytics_service import AnalyticsService
 from services.health_score_service import HealthScoreService
 from services.pattern_detection_service import PatternDetectionService
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside generate_pdf_report to avoid protobuf crash at import time.
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,6 +20,7 @@ class ReportService:
             if not month:
                 month = datetime.datetime.utcnow().strftime("%Y-%m")
                 
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             user_doc = db.collection("users").document(uid).get()
             user_name = "User"

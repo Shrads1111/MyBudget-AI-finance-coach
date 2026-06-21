@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from services.firebase_service import FirebaseService
+# FirebaseService is imported lazily inside methods to avoid protobuf crash at import time.
 from middleware.error_handler import APIError
 from utils.validator import Validator
 from services.notification_service import NotificationService
@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 class GroupService:
     @staticmethod
     def get_collection():
+        from services.firebase_service import FirebaseService
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         return db.collection("group_budgets")
 
@@ -67,6 +69,8 @@ class GroupService:
         if not member_email_or_uid:
             raise APIError("member is required", status_code=400)
 
+        from services.firebase_service import FirebaseService
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         target_uid = None
         
@@ -222,6 +226,7 @@ class GroupService:
                 "createdAt": now_iso
             }
 
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             is_mock = hasattr(db, "mock_collection") or "MagicMock" in str(type(db))
 
@@ -260,6 +265,7 @@ class GroupService:
 
             # Notify members
             try:
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 payer_doc = db.collection("users").document(paid_by).get()
                 payer_name = paid_by
@@ -419,6 +425,7 @@ class GroupService:
             # Notify the payer
             try:
                 paid_by = found_expense.get("paid_by")
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 payer_doc = db.collection("users").document(uid).get()
                 payer_name = uid
@@ -492,6 +499,7 @@ class GroupService:
 
             # Notify the member
             try:
+                from services.firebase_service import FirebaseService
                 db = FirebaseService.get_db()
                 payer_doc = db.collection("users").document(uid).get()
                 payer_name = uid
@@ -558,6 +566,7 @@ class GroupService:
                 raise APIError("This member has already paid their share", status_code=400)
                 
             # Send reminder notification
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             payer_doc = db.collection("users").document(uid).get()
             payer_name = uid
@@ -711,6 +720,7 @@ class GroupService:
                 "createdAt": old_expense.get("createdAt", now_iso)
             }
 
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             is_mock = hasattr(db, "mock_collection") or "MagicMock" in str(type(db))
 
@@ -807,6 +817,7 @@ class GroupService:
             if not target_expense:
                 raise APIError("Expense not found", status_code=404)
 
+            from services.firebase_service import FirebaseService
             db = FirebaseService.get_db()
             is_mock = hasattr(db, "mock_collection") or "MagicMock" in str(type(db))
 
@@ -856,6 +867,7 @@ class GroupService:
         group_data = GroupService.get_group_details(uid, group_id)
         members_uids = group_data.get("members", [])
         
+        from services.firebase_service import FirebaseService
         db = FirebaseService.get_db()
         members_list = []
         for m_uid in members_uids:

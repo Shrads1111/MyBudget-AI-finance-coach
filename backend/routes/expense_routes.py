@@ -8,6 +8,13 @@ expense_bp = Blueprint('expenses', __name__)
 @token_required
 def create_expense():
     data = request.get_json() or {}
+    # Validate allowed fields
+    from utils.validator import Validator
+    allowed_fields = ['amount', 'category', 'date', 'description', 'account_id', 'type']
+    Validator.validate_allowed_fields(data, allowed_fields)
+    # Validate required fields via service validators will handle amount, category, date
+    # Ensure amount is positive and rounded (handled in Validator.validate_amount)
+    # No further checks here
     expense = ExpenseService.create_expense(g.uid, data)
     return jsonify(expense), 201
 
@@ -21,8 +28,16 @@ def get_expenses():
     sort_order = request.args.get('sort_order', 'desc')
     
     try:
-        limit = int(request.args.get('limit', 10))
-        offset = int(request.args.get('offset', 0))
+        # Validate pagination params
+        from utils.validator import Validator
+        limit_raw = request.args.get('limit', 10)
+        offset_raw = request.args.get('offset', 0)
+        limit = Validator.validate_positive_int(limit_raw, 'limit')
+        offset = Validator.validate_positive_int(offset_raw, 'offset')
+        # Validate sorting params
+        sort_by_raw = request.args.get('sort_by', 'date')
+        sort_order_raw = request.args.get('sort_order', 'desc')
+        sort_by, sort_order = Validator.validate_sort_params(sort_by_raw, sort_order_raw, allowed_sort_fields=['date', 'amount', 'category'])
     except ValueError:
         limit = 10
         offset = 0
@@ -49,6 +64,12 @@ def get_expense(id):
 @token_required
 def update_expense(id):
     data = request.get_json() or {}
+    # Validate allowed fields for update
+    from utils.validator import Validator
+    allowed_fields = ['amount', 'category', 'date', 'description', 'account_id', 'type']
+    Validator.validate_allowed_fields(data, allowed_fields)
+    # Validate pagination and sort params are handled in get_expenses
+    # Individual field validations are performed in service update
     expense = ExpenseService.update_expense(g.uid, id, data)
     return jsonify(expense), 200
 

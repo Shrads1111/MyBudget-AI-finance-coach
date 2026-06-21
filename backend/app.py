@@ -1,10 +1,15 @@
 import os
+# CRITICAL: Must be set before ANY google/firebase/protobuf imports.
+# Python 3.14 removed support for C-extension metaclasses (tp_new).
+# This forces protobuf to use its pure-Python fallback implementation.
+os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
+
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify
 from flask_cors import CORS
 from config import Config
-from services.firebase_service import FirebaseService
+# FirebaseService will be imported lazily within create_app to avoid import-time failures
 from middleware.error_handler import register_error_handlers
 
 # Configure central logging
@@ -41,6 +46,7 @@ def create_app():
     
     # Initialize Firebase singleton
     try:
+        from services.firebase_service import FirebaseService
         FirebaseService.initialize()
     except Exception as e:
         app.logger.critical(f"Failed to initialize Firebase Service: {str(e)}")
@@ -64,10 +70,12 @@ def create_app():
     from routes.simulator_routes import simulator_bp
     from routes.account_routes import account_bp
     from routes.category_routes import category_bp
-    from routes.voice_routes import voice_bp
+    from routes.health_routes import health_bp
+    from routes.auth_routes import auth_bp
     from routes.recurring_routes import recurring_bp
-
+    from routes.voice_routes import voice_bp
     # Register blueprints
+    app.register_blueprint(health_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(expense_bp)
     app.register_blueprint(budget_bp)
@@ -85,13 +93,19 @@ def create_app():
     app.register_blueprint(category_bp)
     app.register_blueprint(voice_bp)
     app.register_blueprint(recurring_bp)
+    app.register_blueprint(auth_bp)
 
 
     @app.route('/health', methods=['GET'])
     def health_check():
+        try:
+            from services.firebase_service import FirebaseService
+            firebase_status = "initialized" if FirebaseService._initialized else "failed"
+        except Exception:
+            firebase_status = "failed"
         return jsonify({
             "status": "healthy",
-            "firebase": "initialized" if FirebaseService._initialized else "failed"
+            "firebase": firebase_status
         }), 200
 
     return app
