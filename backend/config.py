@@ -15,7 +15,12 @@ class Config:
     
     # Paths
     BASE_DIR = Path(__file__).resolve().parent
-    FIREBASE_KEY_PATH = BASE_DIR / 'firebase' / 'serviceAccountKey.json'
+    RENDER_SECRET = Path("/etc/secrets/serviceAccountKey.json")
+
+    if RENDER_SECRET.exists():
+        FIREBASE_KEY_PATH = RENDER_SECRET
+    else:
+        FIREBASE_KEY_PATH = BASE_DIR / 'firebase' / 'serviceAccountKey.json'
     LOG_DIR = BASE_DIR / 'logs'
     LOG_FILE = LOG_DIR / 'app.log'
 

@@ -17559,3 +17559,10 @@ Please retry in 18.928564629s. [links {
 2026-06-21 21:43:15,850 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
 2026-06-21 21:43:15,863 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 376-747-242
 2026-06-21 21:43:19,100 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\app.py', reloading
+2026-06-21 21:43:20,118 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-21 21:43:23,918 INFO [services.firebase_service] [firebase_service.py:28] - Firebase Admin successfully initialized.
+2026-06-21 21:43:24,329 INFO [app] [app.py:119] - Starting MyBudget backend on port 5000 under development mode
+2026-06-21 21:43:24,432 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-21 21:43:24,441 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 376-747-242
+2026-06-21 22:26:05,316 INFO [werkzeug] [_internal.py:97] -  * Detected change in 'C:\\Users\\91983\\OneDrive\\Desktop\\MyBudget\\backend\\config.py', reloading
+2026-06-21 22:26:06,590 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
