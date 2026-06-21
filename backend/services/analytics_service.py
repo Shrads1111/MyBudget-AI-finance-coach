@@ -2,6 +2,7 @@ from services.expense_service import ExpenseService
 from services.budget_service import BudgetService
 from services.savings_service import SavingsService
 from services.group_service import GroupService
+from services.account_service import AccountService
 from utils.constants import is_income
 from datetime import datetime
 import collections
@@ -17,6 +18,7 @@ class AnalyticsService:
             expenses = ExpenseService.get_expenses(uid, limit=10000)["expenses"]
             budgets = BudgetService.get_budgets(uid)
             goals = SavingsService.get_goals(uid)
+            accounts = AccountService.get_accounts(uid)
 
             now = datetime.utcnow()
             current_month_str = now.strftime("%Y-%m")
@@ -39,8 +41,66 @@ class AnalyticsService:
                     if exp.get("date", "").startswith(current_month_str):
                         current_month_exp_amt += amt
 
-            # Total balance = Income - Expenses
-            total_balance = round(total_income_amt - total_exp_amt, 2)
+            # Replicate wallet balance routing to compute consistent total balance
+            accounts_list = []
+            for acc in accounts:
+                accounts_list.append({
+                    "account_id": acc.get("account_id"),
+                    "name": acc.get("name", "").lower(),
+                    "type": acc.get("type", "Bank").lower(),
+                    "balance": float(acc.get("initial_balance", 0.0))
+                })
+
+            for exp in expenses:
+                amt = float(exp.get("amount", 0.0))
+                category = exp.get("category", "")
+                desc = exp.get("description", "").lower()
+                cat_lower = category.lower()
+                account_id = exp.get("account_id")
+
+                best_acc_index = -1
+
+                if account_id:
+                    for idx, acc in enumerate(accounts_list):
+                        if acc["account_id"] == account_id:
+                            best_acc_index = idx
+                            break
+                else:
+                    # Fallback auto-routing based on keywords
+                    best_weight = 0
+                    is_paytm = any(k in desc for k in ["paytm", "wallet", "recharge", "swiggy", "zomato", "uber", "ola"])
+                    is_card = any(k in desc for k in ["card", "student", "amazon", "flipkart", "netflix", "spotify", "gym"]) or any(k in cat_lower for k in ["subscriptions", "entertainment"])
+
+                    for idx, acc in enumerate(accounts_list):
+                        acc_name = acc["name"]
+                        acc_type = acc["type"]
+                        weight = 0
+
+                        if acc_name in desc or desc in acc_name:
+                            weight += 10
+
+                        keywords = acc_name.split()
+                        for kw in keywords:
+                            if len(kw) > 2 and kw in desc:
+                                weight += 5
+
+                        if acc_type == "wallet" and is_paytm:
+                            weight += 1
+                        if acc_type == "card" and is_card:
+                            weight += 1
+
+                        if weight > best_weight:
+                            best_weight = weight
+                            best_acc_index = idx
+
+                if best_acc_index != -1:
+                    if is_income(category):
+                        accounts_list[best_acc_index]["balance"] += amt
+                    else:
+                        accounts_list[best_acc_index]["balance"] -= amt
+
+            total_balance = sum(acc["balance"] for acc in accounts_list)
+            total_balance = round(total_balance, 2)
 
             # 2. Friend owe — amount owed TO the user across all groups, plus detailed breakdown
             friend_owe_you = 0.0

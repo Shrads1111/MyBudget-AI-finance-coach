@@ -52,6 +52,8 @@ type TransactionPayload = {
   category: string;
   description: string;
   date: string;
+  type?: string;
+  account_id?: string;
 };
 
 type VoiceMicButtonProps = {
@@ -71,6 +73,7 @@ type EditableTx = {
   friend_name?: string;
   friend_owe_amount?: string;
   selected: boolean;
+  account_id?: string;
 };
 
 // ─── Exported Component ───────────────────────────────────────────────────────
@@ -575,10 +578,12 @@ function VoiceConfirmModal({
       friend_name: tx.friend_name || "",
       friend_owe_amount: tx.friend_owe_amount != null ? String(tx.friend_owe_amount) : "",
       selected: true,
+      account_id: "",
     }));
   });
 
   const [categories, setCategories] = useState<string[]>([]);
+  const [accounts, setAccounts] = useState<Array<{ account_id: string; name: string }>>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -594,6 +599,15 @@ function VoiceConfirmModal({
           "Entertainment", "Education", "Investment", "Others",
           "Salary", "Freelancing", "Refund", "Interest", "Bonus", "Other Income"
         ]);
+      });
+
+    api
+      .get("/api/accounts")
+      .then((res: any) => {
+        setAccounts(res || []);
+      })
+      .catch((e) => {
+        console.error("Failed to load accounts in voice confirmation modal:", e);
       });
   }, []);
 
@@ -653,6 +667,8 @@ function VoiceConfirmModal({
           category: tx.category,
           description: finalDescription,
           date: tx.date,
+          type: tx.type,
+          account_id: tx.account_id || undefined,
         };
       });
       await onConfirm(payloads);
@@ -844,7 +860,7 @@ function VoiceConfirmModal({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label className="text-[10px] text-muted-foreground block mb-1">Description / Note</label>
                       <input
@@ -864,6 +880,22 @@ function VoiceConfirmModal({
                         required
                         className="w-full h-9 rounded-xl bg-surface border border-border px-3 text-xs focus:outline-none focus:border-primary text-foreground"
                       />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] text-muted-foreground block mb-1">Account</label>
+                      <select
+                        value={tx.account_id || ""}
+                        onChange={(e) => updateField(tx.id, "account_id", e.target.value)}
+                        className="w-full h-9 rounded-xl bg-surface border border-border px-3 text-xs focus:outline-none focus:border-primary text-foreground"
+                      >
+                        <option value="">Auto-Route</option>
+                        {accounts.map((acc) => (
+                          <option key={acc.account_id} value={acc.account_id}>
+                            {acc.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

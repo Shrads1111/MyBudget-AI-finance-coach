@@ -32,6 +32,7 @@ function TransactionsPage() {
   
   // Data State
   const [items, setItems] = useState<ExpenseItem[]>([]);
+  const [accounts, setAccounts] = useState<Array<{ account_id: string; name: string }>>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   
@@ -70,8 +71,19 @@ function TransactionsPage() {
     }
   };
 
+  const fetchAccounts = async () => {
+    if (!token) return;
+    try {
+      const res = await api.get("/api/accounts");
+      setAccounts(res || []);
+    } catch (e) {
+      console.error("Failed to load accounts in transactions page:", e);
+    }
+  };
+
   useEffect(() => {
     fetchExpenses();
+    fetchAccounts();
   }, [token, sortField, sortOrder]);
 
   // Client-side filtering & searching for smooth user experience
@@ -123,7 +135,7 @@ function TransactionsPage() {
   };
 
   // Add transaction (manual)
-  const handleAdd = async (payload: { amount: number; category: string; description: string; date: string }) => {
+  const handleAdd = async (payload: { amount: number; category: string; description: string; date: string; account_id?: string }) => {
     try {
       await api.post("/api/expenses", payload);
       setOpen(false);
@@ -245,7 +257,7 @@ function TransactionsPage() {
         </>
       )}
 
-      {open && <AddDialog onClose={() => setOpen(false)} onAdd={handleAdd} />}
+      {open && <AddDialog accounts={accounts} onClose={() => setOpen(false)} onAdd={handleAdd} />}
       {importOpen && <ImportDialog onClose={() => setImportOpen(false)} onImportComplete={() => { setImportOpen(false); fetchExpenses(); }} />}
     </div>
   );
@@ -260,12 +272,21 @@ function Stat({ label, value, up }: { label: string; value: string; up?: boolean
   );
 }
 
-function AddDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (t: { amount: number; category: string; description: string; date: string }) => void }) {
+function AddDialog({ 
+  accounts,
+  onClose, 
+  onAdd 
+}: { 
+  accounts: Array<{ account_id: string; name: string }>;
+  onClose: () => void; 
+  onAdd: (t: { amount: number; category: string; description: string; date: string; account_id?: string }) => void 
+}) {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Food");
   const [customCategoryName, setCustomCategoryName] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [accountId, setAccountId] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [loadingCats, setLoadingCats] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -312,7 +333,13 @@ function AddDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (t: { amoun
         }
       }
 
-      onAdd({ description: title, amount: Number(amount), category: finalCategory, date });
+      onAdd({ 
+        description: title, 
+        amount: Number(amount), 
+        category: finalCategory, 
+        date,
+        account_id: accountId || undefined 
+      });
     } finally {
       setSaving(false);
     }
@@ -364,6 +391,20 @@ function AddDialog({ onClose, onAdd }: { onClose: () => void; onAdd: (t: { amoun
             </p>
           </div>
         )}
+
+        <div>
+          <div className="text-xs text-muted-foreground mb-1">Account (Optional)</div>
+          <select 
+            value={accountId} 
+            onChange={(e) => setAccountId(e.target.value)}
+            className="w-full h-10 rounded-xl bg-surface border border-border px-3 text-sm focus:outline-none focus:border-primary text-foreground"
+          >
+            <option value="">None (Auto-Route)</option>
+            {accounts.map(acc => (
+              <option key={acc.account_id} value={acc.account_id}>{acc.name}</option>
+            ))}
+          </select>
+        </div>
 
         <div>
           <div className="text-xs text-muted-foreground mb-1">Date</div>
@@ -428,6 +469,7 @@ type ParsedTx = {
   category: string;
   is_possible_duplicate?: boolean;
   selected?: boolean;
+  account_id?: string;
 };
 
 function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onImportComplete: () => void }) {
@@ -438,6 +480,17 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
   const [parsedList, setParsedList] = useState<ParsedTx[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
+  const [accounts, setAccounts] = useState<Array<{ account_id: string; name: string }>>([]);
+
+  useEffect(() => {
+    api.get("/api/accounts")
+      .then((res: any) => {
+        setAccounts(res || []);
+      })
+      .catch((e) => {
+        console.error("Failed to load accounts in import dialog:", e);
+      });
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -545,20 +598,13 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
     setImporting(true);
     try {
       for (const t of toImport) {
-        let finalCategory = t.category;
-        let finalDescription = t.description;
-
-        if (t.type === "income") {
-          finalCategory = "Income";
-          // Prepend subcategory to description
-          finalDescription = `${t.category}: ${t.description}`;
-        }
-
         await api.post("/api/expenses", {
           amount: t.amount,
-          category: finalCategory,
-          description: finalDescription,
-          date: t.date
+          category: t.category,
+          description: t.description,
+          date: t.date,
+          type: t.type,
+          account_id: t.account_id || undefined
         });
       }
       onImportComplete();
@@ -682,6 +728,7 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
                       <th className="p-3 w-28">Amount (₹)</th>
                       <th className="p-3 w-28">Type</th>
                       <th className="p-3 w-36">Category</th>
+                      <th className="p-3 w-36">Account</th>
                       <th className="p-3 w-10">Remove</th>
                     </tr>
                   </thead>
@@ -764,6 +811,20 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
                           </select>
                         </td>
 
+                        {/* Account */}
+                        <td className="p-2">
+                          <select 
+                            value={tx.account_id || ""}
+                            onChange={(e) => handleUpdateField(idx, "account_id", e.target.value)}
+                            className="w-full h-8 rounded-lg bg-surface border border-border px-1 text-xs focus:outline-none focus:border-primary text-foreground"
+                          >
+                            <option value="">Auto-Route</option>
+                            {accounts.map(acc => (
+                              <option key={acc.account_id} value={acc.account_id}>{acc.name}</option>
+                            ))}
+                          </select>
+                        </td>
+
                         {/* Delete Row Button */}
                         <td className="p-2 text-center">
                           <button
@@ -782,7 +843,6 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
               </div>
             </div>
           )}
-
         </div>
 
         {/* Footer */}

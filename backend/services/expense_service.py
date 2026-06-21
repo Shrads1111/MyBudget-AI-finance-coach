@@ -20,6 +20,8 @@ class ExpenseService:
         category = Validator.validate_expense_category(data.get("category"))
         date = Validator.validate_date(data.get("date"))
         description = data.get("description", "")
+        account_id = data.get("account_id")
+        type_val = data.get("type")
 
         expense_id = data.get("expense_id") or str(uuid.uuid4())
         created_at = datetime.utcnow().isoformat()
@@ -32,7 +34,9 @@ class ExpenseService:
             description=description,
             date=date,
             created_at=created_at,
-            updated_at=created_at
+            updated_at=created_at,
+            account_id=account_id,
+            type=type_val
         )
 
         try:
@@ -46,39 +50,40 @@ class ExpenseService:
     @staticmethod
     def get_expenses(uid, category=None, month=None, year=None, sort_by="date", sort_order="desc", limit=10, offset=0):
         try:
-            # Query base by uid to isolate data
             query = ExpenseService.get_collection().where("uid", "==", uid)
-            docs = query.stream()
+            
+            if category:
+                query = query.where("category", "==", category)
+            
+            if month:
+                # Expect month format: YYYY-MM
+                query = query.where("date", ">=", month).where("date", "<=", month + "\uf8ff")
+            elif year:
+                # Expect year format: YYYY
+                query = query.where("date", ">=", str(year)).where("date", "<=", str(year) + "\uf8ff")
+
+            # Determine sorting order
+            direction = "DESCENDING" if sort_order.lower() == "desc" else "ASCENDING"
+            
+            # Firestore inequality filter rules: first sort by inequality field ("date")
+            if (month or year) and sort_by != "date":
+                query = query.order_by("date", direction=direction).order_by(sort_by, direction=direction)
+            else:
+                query = query.order_by(sort_by, direction=direction)
+
+            # Get total count (using select([]) to avoid loading document fields)
+            total_count = len(list(query.select([]).stream()))
+
+            # Paginate natively
+            paginated_query = query.offset(offset).limit(limit)
+            docs = paginated_query.stream()
             
             expenses = []
             for doc in docs:
                 expenses.append(doc.to_dict())
-                
-            # Filter in Python to avoid complex Firestore composite indices
-            if category:
-                expenses = [e for e in expenses if e["category"] == category]
-            
-            if month:
-                # Expect month format: YYYY-MM
-                expenses = [e for e in expenses if e["date"].startswith(month)]
-                
-            if year:
-                # Expect year format: YYYY
-                expenses = [e for e in expenses if e["date"].startswith(str(year))]
-
-            # Sort
-            reverse_sort = (sort_order.lower() == "desc")
-            if sort_by in ["amount", "date", "created_at", "updated_at"]:
-                expenses.sort(key=lambda x: x.get(sort_by), reverse=reverse_sort)
-            else:
-                expenses.sort(key=lambda x: x.get("date"), reverse=reverse_sort)
-
-            # Paginate
-            total_count = len(expenses)
-            paginated_expenses = expenses[offset : offset + limit]
 
             return {
-                "expenses": paginated_expenses,
+                "expenses": expenses,
                 "total": total_count,
                 "limit": limit,
                 "offset": offset
@@ -121,6 +126,10 @@ class ExpenseService:
             updates["date"] = Validator.validate_date(data["date"])
         if "description" in data:
             updates["description"] = data["description"]
+        if "account_id" in data:
+            updates["account_id"] = data["account_id"]
+        if "type" in data:
+            updates["type"] = data["type"]
             
         if not updates:
             return expense_data

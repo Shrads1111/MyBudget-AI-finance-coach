@@ -19,6 +19,112 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         # Keep a registry of mocked firestore collections & documents
         self.firestore_db = {}
 
+        class MockQuery:
+            def __init__(self, col_name, db_data, filters=None, orders=None, limit_val=None, offset_val=None, select_fields=None):
+                self.col_name = col_name
+                self.db_data = db_data
+                self.filters = filters or []
+                self.orders = orders or []
+                self.limit_val = limit_val
+                self.offset_val = offset_val
+                self.select_fields = select_fields
+
+            def where(self, field, op, val):
+                new_filters = list(self.filters)
+                new_filters.append((field, op, val))
+                return MockQuery(self.col_name, self.db_data, new_filters, self.orders, self.limit_val, self.offset_val, self.select_fields)
+
+            def order_by(self, field, direction="ASCENDING"):
+                new_orders = list(self.orders)
+                new_orders.append((field, direction))
+                return MockQuery(self.col_name, self.db_data, self.filters, new_orders, self.limit_val, self.offset_val, self.select_fields)
+
+            def limit(self, count):
+                return MockQuery(self.col_name, self.db_data, self.filters, self.orders, count, self.offset_val, self.select_fields)
+
+            def offset(self, num):
+                return MockQuery(self.col_name, self.db_data, self.filters, self.orders, self.limit_val, num, self.select_fields)
+
+            def select(self, fields):
+                return MockQuery(self.col_name, self.db_data, self.filters, self.orders, self.limit_val, self.offset_val, fields)
+
+            def count(self):
+                class MockCountQuery:
+                    def __init__(self, count_val):
+                        self.count_val = count_val
+                    def get(self):
+                        class MultiIndexMock:
+                            def __init__(self, val):
+                                self.value = val
+                            def __getitem__(self, idx):
+                                return self
+                        return [MultiIndexMock(self.count_val)]
+                matching_count = len(self._get_matching_docs())
+                return MockCountQuery(matching_count)
+
+            def _get_matching_docs(self):
+                docs = []
+                if self.col_name in self.db_data:
+                    for d_id, data in self.db_data[self.col_name].items():
+                        match = True
+                        for field, op, val in self.filters:
+                            if field not in data:
+                                match = False
+                                break
+                            actual_val = data[field]
+                            if op == "==":
+                                if actual_val != val:
+                                    match = False
+                                    break
+                            elif op == ">=":
+                                if actual_val < val:
+                                    match = False
+                                    break
+                            elif op == "<=":
+                                if actual_val > val:
+                                    match = False
+                                    break
+                            elif op == "array-contains":
+                                if not isinstance(actual_val, list) or val not in actual_val:
+                                    match = False
+                                    break
+                            elif op == "in":
+                                if actual_val not in val:
+                                    match = False
+                                    break
+                        if match:
+                            docs.append((d_id, data))
+                return docs
+
+            def stream(self):
+                docs = self._get_matching_docs()
+
+                # Apply sorting (reverse sorting if DESCENDING)
+                for field, direction in reversed(self.orders):
+                    reverse_sort = (direction == "DESCENDING")
+                    def get_sort_key(x):
+                        val = x[1].get(field)
+                        if val is None:
+                            return ""
+                        return val
+                    docs.sort(key=get_sort_key, reverse=reverse_sort)
+
+                # Wrap in MagicMock
+                wrapped_docs = []
+                for d_id, data in docs:
+                    d_mock = MagicMock()
+                    d_mock.to_dict.return_value = data
+                    d_mock.id = d_id
+                    wrapped_docs.append(d_mock)
+
+                # Apply offset and limit
+                if self.offset_val is not None:
+                    wrapped_docs = wrapped_docs[self.offset_val:]
+                if self.limit_val is not None:
+                    wrapped_docs = wrapped_docs[:self.limit_val]
+
+                return wrapped_docs
+
         # Set up a helper for firestore mocks
         def mock_collection(col_name):
             col_mock = MagicMock()
@@ -63,54 +169,13 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                 doc_mock.get = get_doc
                 return doc_mock
 
-            def where_query(field, op, val):
-                where_mock = MagicMock()
-                
-                def stream_docs():
-                    docs = []
-                    if col_name in self.firestore_db:
-                        for d_id, data in self.firestore_db[col_name].items():
-                            if field in data:
-                                actual_val = data[field]
-                                matched = False
-                                if isinstance(actual_val, list):
-                                    if val in actual_val:
-                                        matched = True
-                                elif isinstance(val, list):
-                                    if actual_val in val:
-                                        matched = True
-                                else:
-                                    if actual_val == val:
-                                        matched = True
-                                        
-                                if matched:
-                                    d_mock = MagicMock()
-                                    d_mock.to_dict.return_value = data
-                                    d_mock.id = d_id
-                                    docs.append(d_mock)
-                    return docs
-
-                def sub_where(f, o, v):
-                    # Chainable where filters
-                    return where_query(f, o, v)
-
-                where_mock.stream = stream_docs
-                where_mock.where = sub_where
-                return where_mock
-
-            def stream_collection():
-                docs = []
-                if col_name in self.firestore_db:
-                    for d_id, data in self.firestore_db[col_name].items():
-                        d_mock = MagicMock()
-                        d_mock.to_dict.return_value = data
-                        d_mock.id = d_id
-                        docs.append(d_mock)
-                return docs
-
             col_mock.document = mock_document
-            col_mock.where = where_query
-            col_mock.stream = stream_collection
+            col_mock.where = lambda f, o, v: MockQuery(col_name, self.firestore_db).where(f, o, v)
+            col_mock.order_by = lambda f, d="ASCENDING": MockQuery(col_name, self.firestore_db).order_by(f, d)
+            col_mock.limit = lambda c: MockQuery(col_name, self.firestore_db).limit(c)
+            col_mock.offset = lambda n: MockQuery(col_name, self.firestore_db).offset(n)
+            col_mock.select = lambda f: MockQuery(col_name, self.firestore_db).select(f)
+            col_mock.stream = lambda: MockQuery(col_name, self.firestore_db).stream()
             return col_mock
 
         self.db_mock.collection = mock_collection
@@ -1016,7 +1081,18 @@ class MyBudgetBackendTestCase(unittest.TestCase):
         self.assertFalse(is_income(None))
 
         # 2. Test integration with AnalyticsService calculations
-        # Clear database and prepare test expenses
+        # Clear database and prepare test expenses/accounts
+        self.firestore_db["accounts"] = {
+            "acc-1": {
+                "account_id": "acc-1",
+                "uid": "test-user-123",
+                "name": "Main Account",
+                "type": "Bank",
+                "initial_balance": 0.0,
+                "last_details": ""
+            }
+        }
+
         self.firestore_db["expenses"] = {
             "tx-1": {
                 "expense_id": "tx-1",
@@ -1025,6 +1101,7 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                 "category": "Salary", # income category
                 "date": "2026-06-21",
                 "description": "Stipend",
+                "account_id": "acc-1"
             },
             "tx-2": {
                 "expense_id": "tx-2",
@@ -1033,6 +1110,7 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                 "category": "Income", # income category
                 "date": "2026-06-21",
                 "description": "Papa sent",
+                "account_id": "acc-1"
             },
             "tx-3": {
                 "expense_id": "tx-3",
@@ -1041,6 +1119,7 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                 "category": "Food", # expense category
                 "date": "2026-06-21",
                 "description": "Dinner",
+                "account_id": "acc-1"
             },
             "tx-4": {
                 "expense_id": "tx-4",
@@ -1049,6 +1128,7 @@ class MyBudgetBackendTestCase(unittest.TestCase):
                 "category": "Other", # expense category
                 "date": "2026-06-21",
                 "description": "Stationery",
+                "account_id": "acc-1"
             }
         }
 

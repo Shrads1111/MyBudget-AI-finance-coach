@@ -114,42 +114,48 @@ function WalletPage() {
       const amt = parseFloat(item.amount as any) || 0;
       const desc = (item.description || "").toLowerCase();
       const cat = (item.category || "").toLowerCase();
+      const accountId = (item as any).account_id;
 
-      // Classify payment method tags
-      const isPaytm = desc.includes("paytm") || desc.includes("wallet") || desc.includes("recharge") || desc.includes("swiggy") || desc.includes("zomato") || desc.includes("uber") || desc.includes("ola");
-      const isCard = desc.includes("card") || desc.includes("student") || desc.includes("amazon") || desc.includes("flipkart") || desc.includes("netflix") || desc.includes("spotify") || desc.includes("gym") || cat.includes("subscriptions") || cat.includes("entertainment");
-
-      // Auto-route transaction to the most appropriate account
       let bestAccIndex = -1;
-      let bestWeight = 0;
 
-      calculated.forEach((acc, index) => {
-        const accName = acc.name.toLowerCase();
-        const accType = acc.type.toLowerCase();
-        let weight = 0;
+      if (accountId) {
+        bestAccIndex = calculated.findIndex((acc) => acc.account_id === accountId);
+      } else {
+        // Auto-route transaction to the most appropriate account
+        let bestWeight = 0;
 
-        // Name match gives highest priority
-        if (desc.includes(accName) || accName.includes(desc)) {
-          weight += 10;
-        }
-        
-        // Match name keywords
-        const keywords = accName.split(/\s+/);
-        keywords.forEach(kw => {
-          if (kw.length > 2 && desc.includes(kw)) {
-            weight += 5;
+        // Classify payment method tags
+        const isPaytm = desc.includes("paytm") || desc.includes("wallet") || desc.includes("recharge") || desc.includes("swiggy") || desc.includes("zomato") || desc.includes("uber") || desc.includes("ola");
+        const isCard = desc.includes("card") || desc.includes("student") || desc.includes("amazon") || desc.includes("flipkart") || desc.includes("netflix") || desc.includes("spotify") || desc.includes("gym") || cat.includes("subscriptions") || cat.includes("entertainment");
+
+        calculated.forEach((acc, index) => {
+          const accName = acc.name.toLowerCase();
+          const accType = acc.type.toLowerCase();
+          let weight = 0;
+
+          // Name match gives highest priority
+          if (desc.includes(accName) || accName.includes(desc)) {
+            weight += 10;
+          }
+          
+          // Match name keywords
+          const keywords = accName.split(/\s+/);
+          keywords.forEach(kw => {
+            if (kw.length > 2 && desc.includes(kw)) {
+              weight += 5;
+            }
+          });
+
+          // Match type indicators
+          if (accType === "wallet" && isPaytm) weight += 1;
+          if (accType === "card" && isCard) weight += 1;
+
+          if (weight > bestWeight) {
+            bestWeight = weight;
+            bestAccIndex = index;
           }
         });
-
-        // Match type indicators
-        if (accType === "wallet" && isPaytm) weight += 1;
-        if (accType === "card" && isCard) weight += 1;
-
-        if (weight > bestWeight) {
-          bestWeight = weight;
-          bestAccIndex = index;
-        }
-      });
+      }
 
       // Apply amount to the resolved best match account
       if (bestAccIndex !== -1) {
