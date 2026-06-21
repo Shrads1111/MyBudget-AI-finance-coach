@@ -110,8 +110,11 @@ def create_app():
 
     return app
 
+
+# Gunicorn entry point
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
     port = Config.PORT
     app.logger.info(f"Starting MyBudget backend on port {port} under {Config.FLASK_ENV} mode")
     app.run(host='0.0.0.0', port=port, debug=Config.DEBUG)
