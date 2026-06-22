@@ -17528,3 +17528,15 @@ Please retry in 18.928564629s. [links {
 2026-06-21 20:04:27,667 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 20:04:27] "GET /api/accounts HTTP/1.1" 200 -
 2026-06-21 20:04:27,735 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 20:04:27] "GET /api/expenses?limit=1000 HTTP/1.1" 200 -
 2026-06-21 20:04:27,979 INFO [werkzeug] [_internal.py:97] - 127.0.0.1 - - [21/Jun/2026 20:04:27] "GET /api/recurring HTTP/1.1" 200 -
+2026-06-22 12:55:08,711 INFO [services.firebase_service] [firebase_service.py:28] - Firebase Admin successfully initialized.
+2026-06-22 12:55:08,954 INFO [app] [app.py:116] - Starting MyBudget backend on port 5000 under development mode
+2026-06-22 12:55:09,170 INFO [werkzeug] [_internal.py:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.16.207.84:5000
+2026-06-22 12:55:09,170 INFO [werkzeug] [_internal.py:97] - [33mPress CTRL+C to quit[0m
+2026-06-22 12:55:09,173 INFO [werkzeug] [_internal.py:97] -  * Restarting with stat
+2026-06-22 12:55:10,806 INFO [services.firebase_service] [firebase_service.py:28] - Firebase Admin successfully initialized.
+2026-06-22 12:55:10,987 INFO [app] [app.py:116] - Starting MyBudget backend on port 5000 under development mode
+2026-06-22 12:55:11,028 WARNING [werkzeug] [_internal.py:97] -  * Debugger is active!
+2026-06-22 12:55:11,035 INFO [werkzeug] [_internal.py:97] -  * Debugger PIN: 376-747-242
