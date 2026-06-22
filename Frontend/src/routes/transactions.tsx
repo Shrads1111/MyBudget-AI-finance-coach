@@ -534,7 +534,8 @@ function ImportDialog({ onClose, onImportComplete }: { onClose: () => void; onIm
         headers["Authorization"] = `Bearer ${token}`;
       }
       
-      const response = await fetch("http://localhost:5000/api/transactions/import-pdf", {
+      const response = await fetch(
+  `${import.meta.env.VITE_API_URL}/api/transactions/import-pdf`, {
         method: "POST",
         headers,
         body: formData

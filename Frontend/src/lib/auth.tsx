@@ -49,12 +49,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sync user profile to backend
   const syncUserToBackend = async (idToken: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/sync", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${idToken}`
-        }
-      });
+      const res = await fetch(
+  `${import.meta.env.VITE_API_URL}/api/users/sync`,
+  {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${idToken}`
+    }
+  }
+);
       if (res.ok) {
         return await res.json();
       }
